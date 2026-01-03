@@ -7,36 +7,27 @@ on:
       - main
 
 jobs:
-  test_build:
-    name: Build wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    env:
-      MACOSX_DEPLOYMENT_TARGET: "10.12"
-      CIBW_ARCHS_LINUX: x86_64
-
+  build:
+    name: Build pure Python package
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
+      - name: Update uv lock
+        run: uv lock
+
+      - name: Build package
+        run: uv build
+
+      - uses: actions/upload-artifact@v4
         with:
-            toolchain: stable
-            override: true
-
-      - name: Add macos target
-        if: matrix.os == 'macos-latest'
-        run: rustup target add x86_64-apple-darwin
-
-      - name: Install dependencies
-        run: pip install cibuildwheel
-
-      - name: Build wheels for testing
-        run: cibuildwheel --output-dir wheelhouse
+          name: dist
+          path: dist/*

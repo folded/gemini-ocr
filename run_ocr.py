@@ -71,12 +71,6 @@ async def main() -> None:
         help="Disable bounding box output in markdown",
     )
 
-    parser.add_argument(
-        "--enable-chunking",
-        action="store_true",
-        help="Enable V1.5 chunking",
-    )
-
     args = parser.parse_args()
 
     if not args.input_pdf.exists():
@@ -101,7 +95,7 @@ async def main() -> None:
         gcp_project_id=gcp_project,
         mode=args.mode,
         include_bboxes=not args.no_bbox,
-        cache_dir=str(args.cache_dir) if args.cache_dir else ".docai_cache",
+        cache_dir=args.cache_dir,
     )
 
     print(f"Processing {args.input_pdf}...")

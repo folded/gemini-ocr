@@ -61,7 +61,7 @@ ignore = [
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["src"]
+known-first-party = ["gemini-ocr"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [

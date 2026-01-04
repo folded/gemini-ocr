@@ -53,6 +53,7 @@ async def generate_markdown(
     """Generates markdown for a chunk using the Gemini API."""
 
     def _call_gemini() -> genai.types.GenerateContentResponse:
+        # TODO: consider reusing client
         client = genai.Client(vertexai=True, project=settings.project, location=settings.location)
 
         contents: list[genai.types.Part | str] = []

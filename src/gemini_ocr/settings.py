@@ -45,5 +45,5 @@ class Settings:
     """Pages per batch for OCR."""
     num_jobs: int = 10
     """Max concurrent jobs."""
-    cache_dir: str | None = ".docai_cache"
+    cache_dir: str | None = None
     """Directory to store API response cache."""

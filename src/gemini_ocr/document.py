@@ -1,5 +1,6 @@
 import dataclasses
 import hashlib
+import io
 import mimetypes
 import pathlib
 from collections.abc import Iterator
@@ -50,11 +51,12 @@ class DocumentChunk:
 
 
 def _split_pdf(file_path: pathlib.Path, page_count: int | None = None) -> Iterator[DocumentChunk]:
-    doc = fitz.open(file_path)
+    file_bytes = file_path.read_bytes()
+    doc = fitz.open(io.BytesIO(file_bytes))
     doc_page_count = len(doc)
-    document_sha256 = hashlib.sha256(file_path.read_bytes()).hexdigest()
+    document_sha256 = hashlib.sha256(file_bytes).hexdigest()
     if page_count is None:
-        yield DocumentChunk(document_sha256, 0, doc_page_count, file_path.read_bytes(), "application/pdf")
+        yield DocumentChunk(document_sha256, 0, doc_page_count, file_bytes, "application/pdf")
         return
 
     for start_page in range(0, doc_page_count, page_count):

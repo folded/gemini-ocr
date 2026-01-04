@@ -356,9 +356,12 @@ def create_annotated_markdown(
     """Merges OCR bounding boxes into the markdown content."""
 
     # Create initial spans (just the full content)
+    bbox_spans: set[_BBoxFragment] = {span for span in [_make_bbox_fragment(b) for b in bounding_boxes] if len(span)}
+    if not bbox_spans:
+        return {}
+
     max_page = max(b.page for b in bounding_boxes)
     spans = list(_make_document_fragments(markdown_content, (0, max_page + 1)))
-    bbox_spans: set[_BBoxFragment] = {span for span in [_make_bbox_fragment(b) for b in bounding_boxes] if len(span)}
 
     logging.debug("initial span count %d; initial bbox count %d", len(spans), len(bbox_spans))
 

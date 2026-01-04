@@ -55,7 +55,7 @@ jobs:
     needs: [build]
     environment:
       name: pypi
-      url: https://pypi.org/p/seq-smith
+      url: https://pypi.org/p/gemini-ocr
     permissions:
       id-token: write # Required for trusted publishing
     steps:

@@ -1,0 +1,5 @@
+bump2version
+black
+pre-commit
+pylint
+cibuildwheel

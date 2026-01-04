@@ -107,7 +107,7 @@ async def _generate_markdown_for_chunk(
 
     def _adjust_page_num(match: re.Match) -> str:
         relative_page_num = int(match.group(1))
-        actual_page_num = chunk.start_page + relative_page_num - 1
+        actual_page_num = chunk.start_page + relative_page_num
         return f"<!--page: {actual_page_num}-->"
 
     return re.sub(r"<!-{2,3}\s*page:\s*(\d+)\s*-->", _adjust_page_num, text)

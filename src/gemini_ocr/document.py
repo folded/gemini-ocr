@@ -73,18 +73,16 @@ def _resolve_input(input_source: DocumentInput, mime_type: str | None) -> tuple[
     file_bytes: bytes
 
     match input_source:
-        case str():
-            if "://" in input_source:
-                with fsspec.open(input_source, "rb") as f:
-                    file_bytes = f.read()  # type: ignore[attr-defined]
-            else:
-                file_bytes = pathlib.Path(input_source).read_bytes()
+        case str() if "://" in input_source:
+            with fsspec.open(input_source, "rb") as f:
+                file_bytes = f.read()  # type: ignore[attr-defined]
             if mime_type is None:
                 mime_type, _ = mimetypes.guess_type(input_source)
-        case pathlib.Path():
-            file_bytes = input_source.read_bytes()
+        case str() | pathlib.Path() as path:
+            path_obj = pathlib.Path(path)
+            file_bytes = path_obj.read_bytes()
             if mime_type is None:
-                mime_type, _ = mimetypes.guess_type(input_source)
+                mime_type, _ = mimetypes.guess_type(path_obj)
         case bytes():
             file_bytes = input_source
         case BinaryIO():

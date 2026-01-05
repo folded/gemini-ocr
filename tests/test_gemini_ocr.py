@@ -22,7 +22,6 @@ TEST_SETTINGS = Settings(
     location="test-location",
     layout_processor_id="test-processor",
     ocr_processor_id="test-processor",
-    gcp_project_id="test-gcp-project",
     markdown_page_batch_size=2,
     ocr_page_batch_size=2,
 )
@@ -55,8 +54,8 @@ async def test_process_document_full_flow() -> None:
 
         # 3. Call the function under test
         result = await process_document(
-            ocr_settings=TEST_SETTINGS,
-            file_path=test_pdf_path,
+            test_pdf_path,
+            settings=TEST_SETTINGS,
         )
 
         # 4. Assert the results

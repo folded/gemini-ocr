@@ -11,7 +11,6 @@ async def test_generate_markdown_uses_configured_model() -> None:
     ocr_settings = settings.Settings(
         project="test-project",
         location="us-central1",
-        gcp_project_id="test-project",
         layout_processor_id="layout-id",
         ocr_processor_id="ocr-id",
         gemini_model_name="gemini-1.5-pro-preview-0409",

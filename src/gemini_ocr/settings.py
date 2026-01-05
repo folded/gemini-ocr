@@ -1,5 +1,7 @@
 import dataclasses
 import enum
+import os
+from typing import Self
 
 
 class OcrMode(enum.StrEnum):
@@ -13,7 +15,6 @@ class OcrMode(enum.StrEnum):
     """Use Docling for markdown generation."""
 
 
-# Settings for the APIs
 @dataclasses.dataclass
 class Settings:
     """gemini-ocr settings."""
@@ -22,17 +23,17 @@ class Settings:
     """GCP project name."""
     location: str
     """GCP location (e.g. 'us', 'eu')."""
-    gcp_project_id: str
-    """GCP project ID (can be same as project)."""
-    layout_processor_id: str
-    """Document AI layout processor ID."""
-    ocr_processor_id: str
+
+    layout_processor_id: str | None
+    """Document AI layout processor ID (required for Document AI mode)."""
+    ocr_processor_id: str | None
     """Document AI OCR processor ID."""
+    gemini_model_name: str | None = None
+    """Name of the Gemini model to use. (required for Gemini mode)"""
 
     mode: OcrMode = OcrMode.GEMINI
     """Processing mode to use."""
-    gemini_model_name: str = "gemini-2.5-flash"
-    """Name of the Gemini model to use."""
+
     alignment_uniqueness_threshold: float = 0.5
     """Minimum score ratio between best and second-best match."""
     alignment_min_overlap: float = 0.9
@@ -47,3 +48,25 @@ class Settings:
     """Max concurrent jobs."""
     cache_dir: str | None = None
     """Directory to store API response cache."""
+
+    @classmethod
+    def from_env(cls, prefix: str = "GEMINI_OCR_") -> Self:
+        """Create Settings from environment variables."""
+
+        def get(key: str) -> str | None:
+            return os.getenv(prefix + key.upper())
+
+        def getdefault(key: str, default: str) -> str:
+            return os.getenv(prefix + key.upper(), default)
+
+        project = get("project")
+        if project is None:
+            raise ValueError(f"{prefix}PROJECT environment variable is required.")
+
+        return cls(
+            project=project,
+            location=getdefault("location", "us"),
+            layout_processor_id=get("layout_processor_id"),
+            ocr_processor_id=get("ocr_processor_id"),
+            gemini_model_name=get("gemini_model_name"),
+        )

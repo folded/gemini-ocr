@@ -42,11 +42,7 @@ async def main() -> None:
         default=os.environ.get("DOCUMENTAI_OCR_PROCESSOR_ID"),
         help="Document AI OCR Processor ID (for secondary bbox pass)",
     )
-    parser.add_argument(
-        "--gcp-project-id",
-        default=os.environ.get("GCP_PROJECT_ID"),
-        help="GCP Project ID (if different from project)",
-    )
+
     parser.add_argument(
         "--output",
         type=pathlib.Path,
@@ -85,14 +81,11 @@ async def main() -> None:
         print("Error: --processor-id or DOCUMENTAI_LAYOUT_PARSER_PROCESSOR_ID env var required.")
         sys.exit(1)
 
-    gcp_project = args.gcp_project_id or args.project
-
     ocr_settings = settings.Settings(
         project=args.project,
         location=args.location,
         layout_processor_id=args.processor_id,
         ocr_processor_id=args.ocr_processor_id,
-        gcp_project_id=gcp_project,
         mode=args.mode,
         include_bboxes=not args.no_bbox,
         cache_dir=args.cache_dir,
@@ -102,7 +95,7 @@ async def main() -> None:
     print(f"Settings: {ocr_settings}")
 
     try:
-        result = await gemini_ocr.process_document(ocr_settings, args.input_pdf)
+        result = await gemini_ocr.process_document(args.input_pdf, settings=ocr_settings)
 
         output_content = result.annotate() if ocr_settings.include_bboxes else result.markdown_content
 

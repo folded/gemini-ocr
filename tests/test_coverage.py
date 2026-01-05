@@ -35,7 +35,7 @@ async def test_coverage_calculation() -> None:
 
         settings = MagicMock()
 
-        result = await gemini_ocr.process_document(settings, None, markdown_content=markdown)  # type: ignore[arg-type]
+        result = await gemini_ocr.process_document("dummy_path", settings=settings, markdown_content=markdown)  # type: ignore[arg-type]
 
         expected_coverage = 10.0 / 11.0
         assert result.coverage_percent == pytest.approx(expected_coverage)
@@ -64,6 +64,6 @@ async def test_coverage_overlap() -> None:
         m.setattr(bbox_alignment, "create_annotated_markdown", lambda *_, **__: annotated)
 
         settings = MagicMock()
-        result = await gemini_ocr.process_document(settings, None, markdown_content=markdown)  # type: ignore[arg-type]
+        result = await gemini_ocr.process_document("dummy_path", settings=settings, markdown_content=markdown)  # type: ignore[arg-type]
 
         assert result.coverage_percent == 1.0

@@ -54,7 +54,7 @@ async def test_process_document_full_flow() -> None:
 
         # 3. Call the function under test
         result = await process_document(
-            file_path=test_pdf_path,
+            test_pdf_path,
             settings=TEST_SETTINGS,
         )
 

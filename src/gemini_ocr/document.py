@@ -3,9 +3,11 @@ import hashlib
 import mimetypes
 import pathlib
 from collections.abc import Iterator
-from typing import NamedTuple
+from typing import BinaryIO, NamedTuple, TypeAlias
 
 import fitz
+
+DocumentInput: TypeAlias = pathlib.Path | str | bytes | BinaryIO
 
 
 class BBox(NamedTuple):
@@ -49,8 +51,7 @@ class DocumentChunk:
     """MIME type of the chunk data."""
 
 
-def _split_pdf(file_path: pathlib.Path, page_count: int | None = None) -> Iterator[DocumentChunk]:
-    file_bytes = file_path.read_bytes()
+def _split_pdf_bytes(file_bytes: bytes, page_count: int | None = None) -> Iterator[DocumentChunk]:
     doc = fitz.open(stream=file_bytes, filetype="pdf")
     doc_page_count = len(doc)
     document_sha256 = hashlib.sha256(file_bytes).hexdigest()
@@ -66,15 +67,40 @@ def _split_pdf(file_path: pathlib.Path, page_count: int | None = None) -> Iterat
         new_doc.close()
 
 
-def chunks(file_path: pathlib.Path, *, page_count: int | None = None) -> Iterator[DocumentChunk]:
-    """Splits a PDF into single-page PDF chunks or reads a single image file."""
-    mime_type, _ = mimetypes.guess_type(file_path)
+def chunks(
+    input_source: DocumentInput,
+    *,
+    page_count: int | None = None,
+    mime_type: str | None = None,
+) -> Iterator[DocumentChunk]:
+    """Splits a Document into chunks.
+
+    Supports PDF (splits by pages) and Images (single chunk).
+    """
+    file_bytes: bytes
+
+    # Resolve input to bytes and mime_type
+    if isinstance(input_source, (str, pathlib.Path)):
+        path = pathlib.Path(input_source)
+        if mime_type is None:
+            mime_type, _ = mimetypes.guess_type(path)
+        file_bytes = path.read_bytes()
+    elif isinstance(input_source, bytes):
+        file_bytes = input_source
+    else:  # BinaryIO
+        if input_source.seekable():
+            input_source.seek(0)
+        file_bytes = input_source.read()
+
+    # Auto-detect PDF if mime_type is unknown
+    if mime_type is None and file_bytes.startswith(b"%PDF"):
+        mime_type = "application/pdf"
 
     if mime_type and mime_type.startswith("image/"):
-        yield DocumentChunk(hashlib.sha256(file_path.read_bytes()).hexdigest(), 0, 0, file_path.read_bytes(), mime_type)
+        yield DocumentChunk(hashlib.sha256(file_bytes).hexdigest(), 0, 0, file_bytes, mime_type)
         return
 
     if mime_type != "application/pdf":
         raise ValueError(f"Unsupported file type: {mime_type}")
 
-    yield from _split_pdf(file_path, page_count)
+    yield from _split_pdf_bytes(file_bytes, page_count)

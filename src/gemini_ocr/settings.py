@@ -53,21 +53,19 @@ class Settings:
     def from_env(cls, prefix: str = "GEMINI_OCR_") -> Self:
         """Create Settings from environment variables."""
 
-        def get(key: str, default: str | None = None) -> str | None:
+        def get(key: str) -> str | None:
+            return os.getenv(prefix + key.upper())
+
+        def getdefault(key: str, default: str) -> str:
             return os.getenv(prefix + key.upper(), default)
 
-        # Helper to ensure we don't pass None to fields that require str
         project = get("project")
         if project is None:
             raise ValueError(f"{prefix}PROJECT environment variable is required.")
 
-        location = get("location", "us")
-        if location is None:  # Should be "us" default, but for safety
-            raise ValueError(f"{prefix}LOCATION environment variable is required.")
-
         return cls(
             project=project,
-            location=location,
+            location=getdefault("location", "us"),
             layout_processor_id=get("layout_processor_id"),
             ocr_processor_id=get("ocr_processor_id"),
             gemini_model_name=get("gemini_model_name"),

@@ -29,7 +29,7 @@ def test_settings_from_env_defaults() -> None:
         os.environ,
         {
             "GEMINI_OCR_PROJECT": "test-project",
-            # GCP_PROJECT_ID and LOCATION allow defaults/fallback
+            # LOCATION allows defaults/fallback
         },
         clear=True,
     ):

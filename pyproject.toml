@@ -26,6 +26,8 @@ dependencies = [
     "pymupdf",
     "seq-smith>=0.5.1",
     "python-dotenv>=1.2.1",
+    "fsspec",
+    "gcsfs",
 ]
 
 [dependency-groups]

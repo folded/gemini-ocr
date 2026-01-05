@@ -6,6 +6,7 @@ from collections.abc import Iterator
 from typing import BinaryIO, NamedTuple, TypeAlias
 
 import fitz
+import fsspec
 
 DocumentInput: TypeAlias = pathlib.Path | str | bytes | BinaryIO
 
@@ -80,16 +81,19 @@ def chunks(
     file_bytes: bytes
 
     # Resolve input to bytes and mime_type
-    if isinstance(input_source, (str, pathlib.Path)):
+    if isinstance(input_source, str) and "://" in input_source:
+        with fsspec.open(input_source, "rb") as f:
+            file_bytes = f.read()
+        if mime_type is None:
+            mime_type, _ = mimetypes.guess_type(input_source)
+    elif isinstance(input_source, (str, pathlib.Path)):
         path = pathlib.Path(input_source)
+        file_bytes = path.read_bytes()
         if mime_type is None:
             mime_type, _ = mimetypes.guess_type(path)
-        file_bytes = path.read_bytes()
     elif isinstance(input_source, bytes):
         file_bytes = input_source
     else:  # BinaryIO
-        if input_source.seekable():
-            input_source.seek(0)
         file_bytes = input_source.read()
 
     # Auto-detect PDF if mime_type is unknown

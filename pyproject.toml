@@ -21,18 +21,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "google-cloud-storage",
     "google-genai",
     "google-cloud-documentai",
-    "pydantic>=2.12.4",
     "pymupdf",
-    "universal-pathlib>=0.3.5",
-    "fsspec>=2025.10.0",
-    "gcsfs>=2025.10.0",
     "seq-smith>=0.5.1",
-    "flask>=3.1.2",
-    "markdown>=3.10",
-    "pygments>=2.17.2",
     "python-dotenv>=1.2.1",
 ]
 

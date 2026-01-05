@@ -102,7 +102,7 @@ async def main() -> None:
     print(f"Settings: {ocr_settings}")
 
     try:
-        result = await gemini_ocr.process_document(ocr_settings, args.input_pdf)
+        result = await gemini_ocr.process_document(args.input_pdf, settings=ocr_settings)
 
         output_content = result.annotate() if ocr_settings.include_bboxes else result.markdown_content
 

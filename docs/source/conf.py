@@ -9,7 +9,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../../"))  # Adjust path to include the project root
+sys.path.insert(0, os.path.abspath("../../src"))  # Adjust path to include the project root
 
 project = "gemini-ocr"
 copyright = "2025, Tobias Sargeant"

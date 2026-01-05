@@ -97,7 +97,7 @@ async def test_process_document_docai_mode(
     mock_fitz_open.return_value = mock_doc
 
     # Run process_document
-    result = await gemini_ocr.process_document(ocr_settings, dummy_pdf_path)
+    result = await gemini_ocr.process_document(dummy_pdf_path, settings=ocr_settings)
 
     # Assertions
     print("Markdown Content:", result.markdown_content)

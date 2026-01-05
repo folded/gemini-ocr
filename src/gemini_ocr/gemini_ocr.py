@@ -6,7 +6,8 @@ import pathlib
 import re
 import typing
 
-from gemini_ocr import bbox_alignment, docai_layout, docai_ocr, docling, document, gemini, settings
+from gemini_ocr import bbox_alignment, docai_layout, docai_ocr, docling, document, gemini
+from gemini_ocr import settings as settings_module
 
 T = typing.TypeVar("T")
 
@@ -87,17 +88,17 @@ class OcrResult:
 
 
 async def _generate_markdown_for_chunk(
-    ocr_settings: settings.Settings,
+    ocr_settings: settings_module.Settings,
     chunk: document.DocumentChunk,
 ) -> str:
     """Generates markdown for a chunk using the Gemini API."""
 
     match ocr_settings.mode:
-        case settings.OcrMode.GEMINI:
+        case settings_module.OcrMode.GEMINI:
             text = await gemini.generate_markdown(ocr_settings, chunk)
-        case settings.OcrMode.DOCUMENTAI:
+        case settings_module.OcrMode.DOCUMENTAI:
             text = await docai_layout.generate_markdown(ocr_settings, chunk)
-        case settings.OcrMode.DOCLING:
+        case settings_module.OcrMode.DOCLING:
             text = await docling.generate_markdown(ocr_settings, chunk)
         case _:
             text = None
@@ -126,18 +127,35 @@ async def _batched_gather(tasks: collections.abc.Sequence[collections.abc.Awaita
 
 
 async def extract_raw_data(
-    ocr_settings: settings.Settings,
-    file_path: pathlib.Path,
+    file_path: pathlib.Path | str,
+    settings: settings_module.Settings | None = None,
     markdown_content: str | None = None,
 ) -> RawOcrData:
-    chunks = list(document.chunks(file_path, page_count=ocr_settings.markdown_page_batch_size))
+    """
+    Extracts raw OCR data (markdown and bounding boxes) from a file.
+
+    Args:
+        file_path: Path to the document file.
+        settings: Configuration settings. If None, loaded from environment.
+        markdown_content: Optional existing markdown content.
+
+    Returns:
+        RawOcrData containing markdown and bounding boxes.
+    """
+    if settings is None:
+        settings = settings_module.Settings()
+
+    if isinstance(file_path, str):
+        file_path = pathlib.Path(file_path)
+
+    chunks = list(document.chunks(file_path, page_count=settings.markdown_page_batch_size))
     if not markdown_content:
-        markdown_work = [_generate_markdown_for_chunk(ocr_settings, chunk) for chunk in chunks]
-        markdown_chunks = await _batched_gather(markdown_work, ocr_settings.num_jobs)
+        markdown_work = [_generate_markdown_for_chunk(settings, chunk) for chunk in chunks]
+        markdown_chunks = await _batched_gather(markdown_work, settings.num_jobs)
         markdown_content = "\n".join(markdown_chunks)
 
-    bounding_box_work = [docai_ocr.generate_bounding_boxes(ocr_settings, chunk) for chunk in chunks]
-    bboxes = list(itertools.chain.from_iterable(await _batched_gather(bounding_box_work, ocr_settings.num_jobs)))
+    bounding_box_work = [docai_ocr.generate_bounding_boxes(settings, chunk) for chunk in chunks]
+    bboxes = list(itertools.chain.from_iterable(await _batched_gather(bounding_box_work, settings.num_jobs)))
 
     return RawOcrData(
         markdown_content=markdown_content,
@@ -146,16 +164,33 @@ async def extract_raw_data(
 
 
 async def process_document(
-    ocr_settings: settings.Settings,
-    file_path: pathlib.Path,
+    file_path: pathlib.Path | str,
+    settings: settings_module.Settings | None = None,
     markdown_content: str | None = None,
 ) -> OcrResult:
-    raw_data = await extract_raw_data(ocr_settings, file_path, markdown_content)
+    """
+    Processes a document to generate annotated markdown with OCR bounding boxes.
+
+    Args:
+        file_path: Path to the document file.
+        settings: Configuration settings. If None, loaded from environment.
+        markdown_content: Optional existing markdown content.
+
+    Returns:
+        OcrResult containing annotated markdown and stats.
+    """
+    if settings is None:
+        settings = settings_module.Settings()
+
+    if isinstance(file_path, str):
+        file_path = pathlib.Path(file_path)
+
+    raw_data = await extract_raw_data(file_path, settings, markdown_content)
     annotated_markdown = bbox_alignment.create_annotated_markdown(
         raw_data.markdown_content,
         raw_data.bounding_boxes,
-        uniqueness_threshold=ocr_settings.alignment_uniqueness_threshold,
-        min_overlap=ocr_settings.alignment_min_overlap,
+        uniqueness_threshold=settings.alignment_uniqueness_threshold,
+        min_overlap=settings.alignment_min_overlap,
     )
 
     # Calculate coverage

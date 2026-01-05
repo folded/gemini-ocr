@@ -1,3 +1,4 @@
+import pathlib
 from unittest.mock import MagicMock, patch
 
 import fitz
@@ -38,7 +39,7 @@ def test_chunks_gcs_path(valid_pdf_bytes: bytes) -> None:
         assert chunks[0].mime_type == "application/pdf"
 
 
-def test_chunks_local_file(tmp_path, valid_pdf_bytes: bytes) -> None:
+def test_chunks_local_file(tmp_path: pathlib.Path, valid_pdf_bytes: bytes) -> None:
     """Test chunks with local file path (not using fsspec logic in priority)."""
     # This ensures we didn't break local file handling
     pdf_path = tmp_path / "test.pdf"

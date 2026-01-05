@@ -68,6 +68,36 @@ def _split_pdf_bytes(file_bytes: bytes, page_count: int | None = None) -> Iterat
         new_doc.close()
 
 
+def _resolve_input(input_source: DocumentInput, mime_type: str | None) -> tuple[bytes, str | None]:
+    """Resolves input source to bytes and mime_type."""
+    file_bytes: bytes
+
+    if isinstance(input_source, str) and "://" in input_source:
+        with fsspec.open(input_source, "rb") as f:
+            file_bytes = f.read()  # type: ignore[attr-defined]
+        if mime_type is None:
+            mime_type, _ = mimetypes.guess_type(input_source)
+    elif isinstance(input_source, pathlib.Path):
+        # Handle Path objects (including UPath) directly
+        if mime_type is None:
+            mime_type, _ = mimetypes.guess_type(input_source)
+        file_bytes = input_source.read_bytes()
+    elif isinstance(input_source, str):
+        # Local string path
+        path = pathlib.Path(input_source)
+        if mime_type is None:
+            mime_type, _ = mimetypes.guess_type(path)
+        file_bytes = path.read_bytes()
+    elif isinstance(input_source, bytes):
+        file_bytes = input_source
+    else:  # BinaryIO
+        if input_source.seekable():
+            input_source.seek(0)
+        file_bytes = input_source.read()
+
+    return file_bytes, mime_type
+
+
 def chunks(
     input_source: DocumentInput,
     *,
@@ -78,23 +108,7 @@ def chunks(
 
     Supports PDF (splits by pages) and Images (single chunk).
     """
-    file_bytes: bytes
-
-    # Resolve input to bytes and mime_type
-    if isinstance(input_source, str) and "://" in input_source:
-        with fsspec.open(input_source, "rb") as f:
-            file_bytes = f.read()
-        if mime_type is None:
-            mime_type, _ = mimetypes.guess_type(input_source)
-    elif isinstance(input_source, (str, pathlib.Path)):
-        path = pathlib.Path(input_source)
-        file_bytes = path.read_bytes()
-        if mime_type is None:
-            mime_type, _ = mimetypes.guess_type(path)
-    elif isinstance(input_source, bytes):
-        file_bytes = input_source
-    else:  # BinaryIO
-        file_bytes = input_source.read()
+    file_bytes, mime_type = _resolve_input(input_source, mime_type)
 
     # Auto-detect PDF if mime_type is unknown
     if mime_type is None and file_bytes.startswith(b"%PDF"):

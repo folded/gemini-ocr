@@ -72,28 +72,25 @@ def _resolve_input(input_source: DocumentInput, mime_type: str | None) -> tuple[
     """Resolves input source to bytes and mime_type."""
     file_bytes: bytes
 
-    if isinstance(input_source, str) and "://" in input_source:
-        with fsspec.open(input_source, "rb") as f:
-            file_bytes = f.read()  # type: ignore[attr-defined]
-        if mime_type is None:
-            mime_type, _ = mimetypes.guess_type(input_source)
-    elif isinstance(input_source, pathlib.Path):
-        # Handle Path objects (including UPath) directly
-        if mime_type is None:
-            mime_type, _ = mimetypes.guess_type(input_source)
-        file_bytes = input_source.read_bytes()
-    elif isinstance(input_source, str):
-        # Local string path
-        path = pathlib.Path(input_source)
-        if mime_type is None:
-            mime_type, _ = mimetypes.guess_type(path)
-        file_bytes = path.read_bytes()
-    elif isinstance(input_source, bytes):
-        file_bytes = input_source
-    else:  # BinaryIO
-        if input_source.seekable():
-            input_source.seek(0)
-        file_bytes = input_source.read()
+    match input_source:
+        case str():
+            if "://" in input_source:
+                with fsspec.open(input_source, "rb") as f:
+                    file_bytes = f.read()  # type: ignore[attr-defined]
+            else:
+                file_bytes = pathlib.Path(input_source).read_bytes()
+            if mime_type is None:
+                mime_type, _ = mimetypes.guess_type(input_source)
+        case pathlib.Path():
+            file_bytes = input_source.read_bytes()
+            if mime_type is None:
+                mime_type, _ = mimetypes.guess_type(input_source)
+        case bytes():
+            file_bytes = input_source
+        case BinaryIO():
+            file_bytes = input_source.read()
+        case _:
+            raise ValueError(f"Unsupported input source: {input_source}")
 
     return file_bytes, mime_type
 

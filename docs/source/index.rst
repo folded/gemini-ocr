@@ -1,5 +1,5 @@
 gemini-ocr documentation
-=======================
+========================
 
 .. image:: _static/gemini-ocr.svg
    :width: 200px

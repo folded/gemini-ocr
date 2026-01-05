@@ -41,7 +41,7 @@ async def process(
             client_options=client_options.ClientOptions(api_endpoint=f"{location}-documentai.googleapis.com"),
         )
 
-        name = client.processor_path(settings.gcp_project_id, location, processor_id)
+        name = client.processor_path(settings.project, location, processor_id)
 
         raw_document = documentai.RawDocument(content=chunk.data, mime_type=chunk.mime_type)
         request = documentai.ProcessRequest(name=name, raw_document=raw_document, process_options=process_options)

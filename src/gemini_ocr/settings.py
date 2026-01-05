@@ -1,6 +1,7 @@
 import dataclasses
 import enum
 import os
+from typing import Self
 
 
 class OcrMode(enum.StrEnum):
@@ -14,26 +15,25 @@ class OcrMode(enum.StrEnum):
     """Use Docling for markdown generation."""
 
 
-# Settings for the APIs
 @dataclasses.dataclass
 class Settings:
     """gemini-ocr settings."""
 
-    project: str | None = None
+    project: str
     """GCP project name."""
-    location: str = "us"
+    location: str
     """GCP location (e.g. 'us', 'eu')."""
-    gcp_project_id: str | None = None
-    """GCP project ID (can be same as project)."""
-    layout_processor_id: str | None = None
-    """Document AI layout processor ID."""
-    ocr_processor_id: str | None = None
+
+    layout_processor_id: str | None
+    """Document AI layout processor ID (required for Document AI mode)."""
+    ocr_processor_id: str | None
     """Document AI OCR processor ID."""
+    gemini_model_name: str | None = None
+    """Name of the Gemini model to use. (required for Gemini mode)"""
 
     mode: OcrMode = OcrMode.GEMINI
     """Processing mode to use."""
-    gemini_model_name: str = "gemini-2.0-flash-exp"
-    """Name of the Gemini model to use."""
+
     alignment_uniqueness_threshold: float = 0.5
     """Minimum score ratio between best and second-best match."""
     alignment_min_overlap: float = 0.9
@@ -49,31 +49,26 @@ class Settings:
     cache_dir: str | None = None
     """Directory to store API response cache."""
 
-    def __post_init__(self) -> None:
-        self._load_from_env()
-        self._validate()
+    @classmethod
+    def from_env(cls, prefix: str = "GEMINI_OCR_") -> Self:
+        """Create Settings from environment variables."""
 
-    def _load_from_env(self) -> None:
-        if self.project is None:
-            self.project = os.environ.get("GEMINI_OCR_PROJECT")
-        if self.gcp_project_id is None:
-            self.gcp_project_id = os.environ.get("GEMINI_OCR_GCP_PROJECT_ID") or self.project
-        if self.layout_processor_id is None:
-            self.layout_processor_id = os.environ.get("GEMINI_OCR_LAYOUT_PROCESSOR_ID")
-        if self.ocr_processor_id is None:
-            self.ocr_processor_id = os.environ.get("GEMINI_OCR_OCR_PROCESSOR_ID")
+        def get(key: str, default: str | None = None) -> str | None:
+            return os.getenv(prefix + key.upper(), default)
 
-        if self.location == "us" and "GEMINI_OCR_LOCATION" in os.environ:
-            self.location = os.environ["GEMINI_OCR_LOCATION"]
+        # Helper to ensure we don't pass None to fields that require str
+        project = get("project")
+        if project is None:
+            raise ValueError(f"{prefix}PROJECT environment variable is required.")
 
-    def _validate(self) -> None:
-        if not self.project:
-            raise ValueError("project is required (or GEMINI_OCR_PROJECT env var)")
-        if not self.location:
-            raise ValueError("location is required")
-        if not self.gcp_project_id:
-            raise ValueError("gcp_project_id is required (or GEMINI_OCR_GCP_PROJECT_ID env var)")
-        if not self.layout_processor_id:
-            raise ValueError("layout_processor_id is required (or GEMINI_OCR_LAYOUT_PROCESSOR_ID env var)")
-        if not self.ocr_processor_id:
-            raise ValueError("ocr_processor_id is required (or GEMINI_OCR_OCR_PROCESSOR_ID env var)")
+        location = get("location", "us")
+        if location is None:  # Should be "us" default, but for safety
+            raise ValueError(f"{prefix}LOCATION environment variable is required.")
+
+        return cls(
+            project=project,
+            location=location,
+            layout_processor_id=get("layout_processor_id"),
+            ocr_processor_id=get("ocr_processor_id"),
+            gemini_model_name=get("gemini_model_name"),
+        )

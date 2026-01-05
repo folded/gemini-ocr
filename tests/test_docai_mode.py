@@ -15,7 +15,6 @@ def ocr_settings() -> settings.Settings:
         location="us-central1",
         ocr_processor_id="test-processor",
         layout_processor_id="test-layout-processor",
-        gcp_project_id="test-project",
         mode=settings.OcrMode.DOCUMENTAI,
         cache_dir=None,
     )

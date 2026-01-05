@@ -143,7 +143,7 @@ async def extract_raw_data(
         RawOcrData containing markdown and bounding boxes.
     """
     if settings is None:
-        settings = settings_module.Settings()
+        settings = settings_module.Settings.from_env()
 
     if isinstance(file_path, str):
         file_path = pathlib.Path(file_path)
@@ -180,7 +180,7 @@ async def process_document(
         OcrResult containing annotated markdown and stats.
     """
     if settings is None:
-        settings = settings_module.Settings()
+        settings = settings_module.Settings.from_env()
 
     if isinstance(file_path, str):
         file_path = pathlib.Path(file_path)

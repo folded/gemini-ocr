@@ -22,7 +22,6 @@ TEST_SETTINGS = Settings(
     location="test-location",
     layout_processor_id="test-processor",
     ocr_processor_id="test-processor",
-    gcp_project_id="test-gcp-project",
     markdown_page_batch_size=2,
     ocr_page_batch_size=2,
 )

@@ -122,7 +122,7 @@ async def main() -> None:
         sys.exit(1)
 
     ocr_settings = settings.Settings(
-        project=args.project,
+        project_id=args.project,
         location=args.location,
         quota_project_id=args.quota_project,
         layout_processor_id=args.processor_id,

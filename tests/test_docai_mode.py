@@ -11,7 +11,7 @@ from gemini_ocr import gemini_ocr, settings
 @pytest.fixture
 def ocr_settings() -> settings.Settings:
     return settings.Settings(
-        project="test-project",
+        project_id="test-project",
         location="us-central1",
         ocr_processor_id="test-processor",
         layout_processor_id="test-layout-processor",

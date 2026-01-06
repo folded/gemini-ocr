@@ -9,7 +9,7 @@ from gemini_ocr import document, gemini, settings
 async def test_generate_markdown_uses_configured_model() -> None:
     # Setup settings with custom model
     ocr_settings = settings.Settings(
-        project="test-project",
+        project_id="test-project",
         location="us-central1",
         layout_processor_id="layout-id",
         ocr_processor_id="ocr-id",

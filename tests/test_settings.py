@@ -16,7 +16,7 @@ def test_settings_from_env() -> None:
     }
     with patch.dict(os.environ, env, clear=True):
         s = Settings.from_env()
-        assert s.project == "env-project"
+        assert s.project_id == "env-project"
         assert s.location == "eu"
 
         assert s.layout_processor_id == "env-layout"
@@ -42,7 +42,7 @@ def test_settings_from_env_defaults() -> None:
     ):
         # layout_processor_id and ocr_processor_id return None if missing in env
         s = Settings.from_env()
-        assert s.project == "test-project"
+        assert s.project_id == "test-project"
         assert s.location == "us"  # default
 
         assert s.layout_processor_id is None

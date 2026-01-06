@@ -58,13 +58,13 @@ async def generate_markdown(
         credentials, _ = google.auth.default()
         if settings.quota_project_id:
             credentials = credentials.with_quota_project(settings.quota_project_id)
-        elif settings.project:
+        elif settings.project_id:
             # Fallback to project if quota_project_id is not set
-            credentials = credentials.with_quota_project(settings.project)
+            credentials = credentials.with_quota_project(settings.project_id)
 
         client = genai.Client(
             vertexai=True,
-            project=settings.project,
+            project=settings.project_id,
             location=settings.location,
             credentials=credentials,
         )

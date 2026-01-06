@@ -18,8 +18,8 @@ if not dummy_pdf_path.exists():
 
 # Dummy settings for the test
 TEST_SETTINGS = Settings(
-    project="test-project",
-    location="test-location",
+    project_id="test-project",
+    location="us-central1",
     layout_processor_id="test-processor",
     ocr_processor_id="test-processor",
     markdown_page_batch_size=2,

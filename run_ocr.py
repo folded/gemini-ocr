@@ -7,8 +7,29 @@ import sys
 import traceback
 
 import dotenv
+import google.auth
+from google import genai
 
 from gemini_ocr import gemini_ocr, settings
+
+
+def _list_models(project: str | None, location: str, quota_project: str | None) -> None:
+    if not project:
+        print("Error: --project or GOOGLE_CLOUD_PROJECT env var required.")
+        sys.exit(1)
+
+    credentials, _ = google.auth.default()
+    if quota_project:
+        credentials = credentials.with_quota_project(quota_project)
+    elif project:
+        credentials = credentials.with_quota_project(project)
+
+    client = genai.Client(vertexai=True, project=project, location=location, credentials=credentials)
+    print("Available Gemini Models:")
+    for model in client.models.list():
+        if model.name and "gemini" in model.name:
+            print(f" - {model.name}")
+    sys.exit(0)
 
 
 async def main() -> None:
@@ -26,6 +47,11 @@ async def main() -> None:
         "--project",
         default=os.environ.get("GOOGLE_CLOUD_PROJECT"),
         help="Vertex AI Project ID",
+    )
+    parser.add_argument(
+        "--quota-project",
+        default=os.environ.get("GEMINI_OCR_QUOTA_PROJECT_ID"),
+        help="GCP Quota Project ID (for billing)",
     )
     parser.add_argument(
         "--location",
@@ -67,12 +93,21 @@ async def main() -> None:
     )
 
     parser.add_argument(
+        "--list-models",
+        action="store_true",
+        help="List available Gemini models and exit",
+    )
+
+    parser.add_argument(
         "--no-bbox",
         action="store_true",
         help="Disable bounding box output in markdown",
     )
 
     args = parser.parse_args()
+
+    if args.list_models:
+        _list_models(args.project, args.location, args.quota_project)
 
     if not args.input_pdf.exists():
         print(f"Error: Input file {args.input_pdf} not found.")
@@ -89,6 +124,7 @@ async def main() -> None:
     ocr_settings = settings.Settings(
         project=args.project,
         location=args.location,
+        quota_project_id=args.quota_project,
         layout_processor_id=args.processor_id,
         ocr_processor_id=args.ocr_processor_id,
         gemini_model_name=args.model,

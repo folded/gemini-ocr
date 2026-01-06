@@ -23,11 +23,13 @@ class Settings:
     """GCP project name."""
     location: str
     """GCP location (e.g. 'us', 'eu')."""
-
     layout_processor_id: str | None
     """Document AI layout processor ID (required for Document AI mode)."""
     ocr_processor_id: str | None
     """Document AI OCR processor ID."""
+
+    quota_project_id: str | None = None
+    """GCP quota project ID (defaults to project if None)."""
     gemini_model_name: str | None = None
     """Name of the Gemini model to use. (required for Gemini mode)"""
 
@@ -66,6 +68,7 @@ class Settings:
         return cls(
             project=project,
             location=getdefault("location", "us"),
+            quota_project_id=get("quota_project_id"),
             layout_processor_id=get("layout_processor_id"),
             ocr_processor_id=get("ocr_processor_id"),
             gemini_model_name=get("gemini_model_name"),

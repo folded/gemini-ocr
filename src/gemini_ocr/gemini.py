@@ -1,6 +1,7 @@
 import asyncio
 from typing import Final
 
+import google.auth
 from google import genai
 
 from gemini_ocr import document, settings
@@ -54,14 +55,30 @@ async def generate_markdown(
 
     def _call_gemini() -> genai.types.GenerateContentResponse:
         # TODO: consider reusing client
-        client = genai.Client(vertexai=True, project=settings.project, location=settings.location)
+        credentials, _ = google.auth.default()
+        if settings.quota_project_id:
+            credentials = credentials.with_quota_project(settings.quota_project_id)
+        elif settings.project:
+            # Fallback to project if quota_project_id is not set
+            credentials = credentials.with_quota_project(settings.project)
+
+        client = genai.Client(
+            vertexai=True,
+            project=settings.project,
+            location=settings.location,
+            credentials=credentials,
+        )
+
+        model_name = settings.gemini_model_name
+        if model_name is None:
+            raise ValueError("gemini_model_name is required for Gemini mode.")
 
         contents: list[genai.types.Part | str] = []
         contents.append(genai.types.Part(inline_data=genai.types.Blob(data=chunk.data, mime_type=chunk.mime_type)))
         contents.append(GEMINI_PROMPT)
 
         return client.models.generate_content(
-            model=settings.gemini_model_name,
+            model=model_name,
             contents=contents,
             config=genai.types.GenerateContentConfig(response_mime_type="text/plain"),
         )

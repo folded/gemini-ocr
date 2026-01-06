@@ -21,6 +21,13 @@ def test_settings_from_env() -> None:
 
         assert s.layout_processor_id == "env-layout"
         assert s.ocr_processor_id == "env-ocr"
+        assert s.quota_project_id is None
+
+    # Test setting QUOTA_PROJECT_ID
+    env["GEMINI_OCR_QUOTA_PROJECT_ID"] = "env-quota"
+    with patch.dict(os.environ, env, clear=True):
+        s = Settings.from_env()
+        assert s.quota_project_id == "env-quota"
 
 
 def test_settings_from_env_defaults() -> None:

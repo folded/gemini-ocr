@@ -26,9 +26,6 @@ class TableCell:
 
 
 class LayoutProcessor:
-    def __init__(self) -> None:
-        self._table_count = 0
-
     def process(
         self,
         blocks: Sequence[documentai.Document.DocumentLayout.DocumentLayoutBlock],
@@ -72,8 +69,7 @@ class LayoutProcessor:
         self,
         block: documentai.Document.DocumentLayout.DocumentLayoutBlock,
     ) -> Generator[str, None, None]:
-        self._table_count += 1
-        yield f"<!--table: {self._table_count}-->\n"
+        yield "<!--table-->\n"
 
         table_block = block.table_block
         grid, num_rows, num_cols = self._build_table_grid(table_block)
@@ -182,6 +178,9 @@ async def _run_document_ai(settings: settings.Settings, chunk: document.Document
             return_bounding_boxes=True,
         ),
     )
+
+    if settings.layout_processor_id is None:
+        raise ValueError("Layout processor ID is not set")
 
     return await docai.process(settings, process_options, settings.layout_processor_id, chunk)
 

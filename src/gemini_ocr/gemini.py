@@ -39,11 +39,10 @@ when rendered.**
 * Replace any images with a text description of their content.
   * Convert bar charts into markdown tables.
 * Convert tables contained in images into markdown.
-* Insert markers at the start of each page of the form `<!--page: {num}-->` starting at page 0
-* Surround tables and figure descriptions with markers, where {num} is
-  determined by the document:
-  * `<!--table: {num}-->` ... `<!--end-->`
-  * `<!--figure: {num}-->` ... `<!--end-->`
+* Insert markers at the start of each page of the form `<!--page-->`
+* Surround tables and figure descriptions with markers:
+  * `<!--table-->` ... `<!--end-->`
+  * `<!--figure-->` ... `<!--end-->`
 """
 
 

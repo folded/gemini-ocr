@@ -75,15 +75,7 @@ async def _generate_markdown_for_chunk(
         case _:
             text = None
 
-    if text is None:
-        return ""
-
-    def _adjust_page_num(match: re.Match) -> str:
-        relative_page_num = int(match.group(1))
-        actual_page_num = chunk.start_page + relative_page_num
-        return f"<!--page: {actual_page_num}-->"
-
-    return re.sub(r"<!-{2,3}\s*page:\s*(\d+)\s*-->", _adjust_page_num, text)
+    return text or ""
 
 
 # --- Merging and Annotation ---
@@ -121,6 +113,16 @@ async def extract_raw_data(
     if not markdown_content:
         markdown_work = [_generate_markdown_for_chunk(settings, chunk) for chunk in chunks]
         markdown_chunks = await _batched_gather(markdown_work, settings.num_jobs)
+
+        # Renumber tables and figures
+        counters = collections.Counter()
+
+        def _renumber(match: re.Match) -> str:
+            kind = match.group(1)
+            counters[kind] += 1
+            return f"<!--{kind}: {counters[kind]}-->"
+
+        markdown_chunks = [re.sub(r"<!--(table|figure)-->", _renumber, chunk_text) for chunk_text in markdown_chunks]
         markdown_content = "\n".join(markdown_chunks)
 
     bounding_box_work = [docai_ocr.generate_bounding_boxes(settings, chunk) for chunk in chunks]

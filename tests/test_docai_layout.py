@@ -57,7 +57,7 @@ def test_layout_processor_table_tags() -> None:
 
     assert "# Header text" not in result  # Paragraphs don't get #
     assert "Header text" in result
-    assert "<!--table: 1-->" in result
+    assert "<!--table-->" in result
     assert "| H1 | H2 |" in result
     assert "| C1 | C2 |" in result
     assert "<!--end-->" in result
@@ -74,6 +74,4 @@ def test_multiple_tables() -> None:
     processor = docai_layout.LayoutProcessor()
     result = "".join(processor.process([table_block, table_block]))
 
-    # Even empty tables increment count and output start tag (and end tag)
-    assert "<!--table: 1-->" in result
-    assert "<!--table: 2-->" in result
+    assert result.count("<!--table-->") == 2

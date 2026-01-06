@@ -42,6 +42,11 @@ async def main() -> None:
         default=os.environ.get("DOCUMENTAI_OCR_PROCESSOR_ID"),
         help="Document AI OCR Processor ID (for secondary bbox pass)",
     )
+    parser.add_argument(
+        "--model",
+        default=os.environ.get("GEMINI_OCR_GEMINI_MODEL_NAME"),
+        help="Gemini Model Name (e.g. gemini-2.0-flash-exp)",
+    )
 
     parser.add_argument(
         "--output",
@@ -86,6 +91,7 @@ async def main() -> None:
         location=args.location,
         layout_processor_id=args.processor_id,
         ocr_processor_id=args.ocr_processor_id,
+        gemini_model_name=args.model,
         mode=args.mode,
         include_bboxes=not args.no_bbox,
         cache_dir=args.cache_dir,

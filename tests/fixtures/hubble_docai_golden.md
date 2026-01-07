@@ -16,8 +16,8 @@ available.
 
 <span class="ocr_bbox" data-bbox="446,449,457,629" data-page="0">BY EDWIN HUBBLE</span> <span class="ocr_bbox" data-bbox="470,255,480,823" data-page="0">MOUNT WILSON OBSERVATORY, CARNEGIE INSTITUTION OF
 WASHINGTON</span> <span class="ocr_bbox" data-bbox="492,401,503,668" data-page="0">Communicated January 17, 1929</span> <span class="ocr_bbox" data-bbox="518,218,532,883" data-page="0">Determinations of the motion
-of the sun with respect to the extra</span>-<span class="ocr_bbox" data-bbox="534,196,549,882" data-page="0">galactic nebulae have involved a
-\(K\) term of several hundred kilometers</span> <span class="ocr_bbox" data-bbox="550,196,567,883" data-page="0">which appears to be variable.
+of the sun with respect to the extra</span>-galactic nebulae have involved a
+<span class="ocr_bbox" data-bbox="534,196,549,882" data-page="0">$K$</span> term of several hundred kilometers <span class="ocr_bbox" data-bbox="550,196,567,883" data-page="0">which appears to be variable.
 Explanations of this paradox have been</span> <span class="ocr_bbox" data-bbox="567,197,582,880" data-page="0">sought in a correlation between
 apparent radial velocities and distances</span>, <span class="ocr_bbox" data-bbox="585,197,598,884" data-page="0">but so far the results have
 not been convincing. The present paper is a</span> <span class="ocr_bbox" data-bbox="600,196,616,883" data-page="0">re-examination of the
@@ -33,9 +33,9 @@ nebulae which are well resolved by existing instru<span class="ocr_bbox" data-bb
 these nebulae, together with those in which any stars</span> <span class="ocr_bbox" data-bbox="767,198,780,885" data-page="0">at all can be
 recognized, indicates the probability of an approximately</span> <span class="ocr_bbox" data-bbox="783,198,797,883" data-page="0">uniform
 upper limit to the absolute luminosity of stars, in the late-type</span>
-<span class="ocr_bbox" data-bbox="799,198,813,855" data-page="0">spirals and irregular nebulae at least, of the order of \(M\)
-(photographic</span>) \(=-<span class="ocr_bbox" data-bbox="815,200,829,883" data-page="0">6.3\). 1 The apparent luminosities of the brightest
-stars in such nebulae</span> <span class="ocr_bbox" data-bbox="832,197,845,883" data-page="0">are thus criteria which, although rough and to
+spirals and irregular nebulae at least, of the order of <span class="ocr_bbox" data-bbox="799,198,813,855" data-page="0">$M$</span>
+(photographic) <span class="ocr_bbox" data-bbox="815,200,829,883" data-page="0">$=-6.3$</span>. 1 The apparent luminosities of the brightest
+stars in such nebulae <span class="ocr_bbox" data-bbox="832,197,845,883" data-page="0">are thus criteria which, although rough and to
 be applied with caution</span>,
 
 <span class="ocr_bbox" data-bbox="135,117,151,804" data-page="1">furnish reasonable estimates of the distances of all extra-galactic
@@ -47,7 +47,7 @@ systems</span> <span class="ocr_bbox" data-bbox="154,118,165,507" data-page="1">
 FROM</span> <span class="ocr_bbox" data-bbox="212,294,220,592" data-page="1">MEAN LUMINOSITIES IN A CLUSTER</span>
 
 <!--table: 1-->
-| <span class="ocr_bbox" data-bbox="227,179,234,226" data-page="1">OBJECT</span> | \(m\) | \(r\) |  | \(m_{t}\) | \(M\) |
+| <span class="ocr_bbox" data-bbox="227,179,234,226" data-page="1">OBJECT</span> | $m$ | $r$ |  | $m_{t}$ | $M$ |
 | --- | --- | --- | --- | --- | --- |
 | <span class="ocr_bbox" data-bbox="238,166,249,228" data-page="1">S. Mag</span>. |  | <span class="ocr_bbox" data-bbox="239,408,247,453" data-page="1">0.032</span> | + <span class="ocr_bbox" data-bbox="239,519,248,570" data-page="1">170</span> | 1.5 | -16.0 |
 | <span class="ocr_bbox" data-bbox="252,165,263,228" data-page="1">L. Mag</span>. | .. | <span class="ocr_bbox" data-bbox="252,408,261,452" data-page="1">0.034</span> | + 290 | 0.5 | 17.2 |
@@ -76,23 +76,22 @@ FROM</span> <span class="ocr_bbox" data-bbox="212,294,220,592" data-page="1">MEA
 | <span class="ocr_bbox" data-bbox="572,116,580,163" data-page="1">Mean</span> |  |  |  |  | -15.5 |
 
 <!--end-->
-\(<span class="ocr_bbox" data-bbox="591,132,603,622" data-page="1">m_{s}\)= photographic magnitude of brightest stars involved</span>. \(<span class="ocr_bbox" data-bbox="605,135,616,740" data-page="1">r\)=
-distance in units of \(10^{6}\) parsecs. The first two are Shapley's
-values</span>. \(v\)= <span class="ocr_bbox" data-bbox="618,168,629,802" data-page="1">measured velocities in km./sec. N. G. C. 6822, 221, 224
-and 5457 are recent</span> <span class="ocr_bbox" data-bbox="632,209,643,451" data-page="1">determinations by Humason</span>. \(<span class="ocr_bbox" data-bbox="646,132,656,803" data-page="1">m_{i}\)= Holetschek's
-visual magnitude as corrected by Hopmann. The first three</span> <span class="ocr_bbox" data-bbox="660,209,671,801" data-page="1">objects were
-not measured by Holetschek, and the values of \(m_{i}\) represent</span>
+<span class="ocr_bbox" data-bbox="591,132,603,622" data-page="1">$m_{s}$</span>= photographic magnitude of brightest stars involved. <span class="ocr_bbox" data-bbox="605,135,616,740" data-page="1">$r$</span>=
+distance in units of $10^{6}$ parsecs. The first two are Shapley's
+values. $v$= <span class="ocr_bbox" data-bbox="618,168,629,802" data-page="1">measured velocities in km./sec. N. G. C. 6822, 221, 224
+and 5457 are recent</span> <span class="ocr_bbox" data-bbox="632,209,643,451" data-page="1">determinations by Humason</span>. <span class="ocr_bbox" data-bbox="646,132,656,803" data-page="1">$m_{i}$</span>= Holetschek's
+visual magnitude as corrected by Hopmann. The first three objects were
+not measured by Holetschek, and the values of <span class="ocr_bbox" data-bbox="660,209,671,801" data-page="1">$m_{i}$</span> represent
 <span class="ocr_bbox" data-bbox="673,209,684,727" data-page="1">estimates by the author based upon such data as are available</span>.
-\(M_{t}\)= <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">total visual absolute magnitude computed from \(m_{t}\) and
-\(r</span>\). <span class="ocr_bbox" data-bbox="718,138,731,804" data-page="1">Finally, the nebulae themselves appear to be of a definite
-order of</span> <span class="ocr_bbox" data-bbox="735,117,748,802" data-page="1">absolute luminosity, exhibiting a range of four or five
-magnitudes about</span> <span class="ocr_bbox" data-bbox="749,116,766,802" data-page="1">an average value M (visual) = \(-15.2.^{1}\) The
-application of this statistical</span> <span class="ocr_bbox" data-bbox="767,116,782,801" data-page="1">average to individual cases can rarely
-be used to advantage, but where</span> <span class="ocr_bbox" data-bbox="785,116,797,801" data-page="1">considerable numbers are involved, and
-especially in the various clusters</span> <span class="ocr_bbox" data-bbox="799,117,814,802" data-page="1">of nebulae, mean apparent
-luminosities of the nebulae themselves offer</span> <span class="ocr_bbox" data-bbox="817,116,828,489" data-page="1">reliable estimates of the
-mean distances</span>. <span class="ocr_bbox" data-bbox="834,138,846,802" data-page="1">Radial velocities of 46 extra-galactic nebulae are now
-available, but</span>
+$M_{t}$= total visual absolute magnitude computed from <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">$m_{t}$</span> and
+$r$. <span class="ocr_bbox" data-bbox="718,138,731,804" data-page="1">Finally, the nebulae themselves appear to be of a definite order
+of</span> <span class="ocr_bbox" data-bbox="735,117,748,802" data-page="1">absolute luminosity, exhibiting a range of four or five magnitudes
+about</span> an average value M (visual) = <span class="ocr_bbox" data-bbox="749,116,766,802" data-page="1">$-15.2.^{1}$</span> The application of
+this statistical <span class="ocr_bbox" data-bbox="767,116,782,801" data-page="1">average to individual cases can rarely be used to
+advantage, but where</span> <span class="ocr_bbox" data-bbox="785,116,797,801" data-page="1">considerable numbers are involved, and especially
+in the various clusters</span> <span class="ocr_bbox" data-bbox="799,117,814,802" data-page="1">of nebulae, mean apparent luminosities of the
+nebulae themselves offer</span> <span class="ocr_bbox" data-bbox="817,116,828,489" data-page="1">reliable estimates of the mean distances</span>.
+<span class="ocr_bbox" data-bbox="834,138,846,802" data-page="1">Radial velocities of 46 extra-galactic nebulae are now available, but</span>
 
 <span class="ocr_bbox" data-bbox="129,196,143,882" data-page="2">individual distances are estimated for only 24. For one other, N. G.
 C</span>. <span class="ocr_bbox" data-bbox="146,197,159,882" data-page="2">3521, an estimate could probably be made, but no photographs are
@@ -103,8 +102,8 @@ involved. The next</span> <span class="ocr_bbox" data-bbox="212,197,226,883" dat
 a uniform upper limit</span> <span class="ocr_bbox" data-bbox="229,197,242,883" data-page="2">of stellar luminosity, are subject to
 considerable probable errors but are</span> <span class="ocr_bbox" data-bbox="245,197,259,883" data-page="2">believed to be the most
 reasonable values at present available. The last</span> <span class="ocr_bbox" data-bbox="262,197,275,883" data-page="2">four objects appear
-to be in the Virgo Cluster. The distance assigned</span> <span class="ocr_bbox" data-bbox="278,197,291,883" data-page="2">to the cluster, \(2
-\times 10^{6}\) parsecs, is derived from the distribution of nebular</span>
+to be in the Virgo Cluster. The distance assigned</span> to the cluster, <span class="ocr_bbox" data-bbox="278,197,291,883" data-page="2">$2
+\times 10^{6}$</span> parsecs, is derived from the distribution of nebular
 <span class="ocr_bbox" data-bbox="295,197,308,884" data-page="2">luminosities, together with luminosities of stars in some of the
 later-type</span> <span class="ocr_bbox" data-bbox="312,198,325,883" data-page="2">spirals, and differs somewhat from the Harvard estimate of
 ten million</span> <span class="ocr_bbox" data-bbox="328,197,342,309" data-page="2">light years. 2</span> <span class="ocr_bbox" data-bbox="345,220,356,883" data-page="2">The data in the table indicate a linear
@@ -114,8 +113,8 @@ solutions. This suggests a new solution for the solar</span> <span class="ocr_bb
 the distances are introduced as coefficients of the K term</span>, <span class="ocr_bbox" data-bbox="411,198,425,885" data-page="2">i. e., the
 velocities are assumed to vary directly with the distances, and</span> <span class="ocr_bbox" data-bbox="426,198,442,885" data-page="2">hence
 K represents the velocity at unit distance due to this effect. The</span>
-<span class="ocr_bbox" data-bbox="444,199,458,582" data-page="2">equations of condition then take the form</span> \(<span class="ocr_bbox" data-bbox="473,295,488,787" data-page="2">rK + X \cos \alpha \cos
-\delta + Y \sin \alpha \cos \delta + Z \sin \delta = v</span>\) <span class="ocr_bbox" data-bbox="503,200,516,885" data-page="2">Two solutions
+<span class="ocr_bbox" data-bbox="444,199,458,582" data-page="2">equations of condition then take the form</span> <span class="ocr_bbox" data-bbox="473,295,488,787" data-page="2">$rK + X \cos \alpha \cos
+\delta + Y \sin \alpha \cos \delta + Z \sin \delta = v$</span> <span class="ocr_bbox" data-bbox="503,200,516,885" data-page="2">Two solutions
 have been made, one using the 24 nebulae individually</span>, <span class="ocr_bbox" data-bbox="519,199,532,885" data-page="2">the other
 combining them into 9 groups according to proximity in direc<span class="ocr_bbox" data-bbox="536,200,547,552" data-page="2"></span>tion and
 in distance. The results are</span>
@@ -124,64 +123,63 @@ in distance. The results are</span>
 |  |  |  |
 | --- | --- | --- |
 |  | <span class="ocr_bbox" data-bbox="564,385,572,458" data-page="2">24 OBJECTS</span> | <span class="ocr_bbox" data-bbox="564,549,572,611" data-page="2">9 GROUPS</span> |
-| X | \(- 65 \pm <span class="ocr_bbox" data-bbox="618,447,628,465" data-page="2">50</span>\) | \(+ 3 \pm 70\) |
-| Y | \(+<span class="ocr_bbox" data-bbox="589,367,600,470" data-page="2">226 \pm 95</span>\) | \(+<span class="ocr_bbox" data-bbox="589,527,600,638" data-page="2">230 \pm 120</span>\) |
-| Z | \(-195 \pm 40\) | \(-13<span class="ocr_bbox" data-bbox="575,527,586,637" data-page="2">3 \pm 70</span>\) |
-| K | \(+4<span class="ocr_bbox" data-bbox="576,367,588,468" data-page="2">65 \pm 50</span>\) | \(+513<span class="ocr_bbox" data-bbox="617,531,629,832" data-page="2"> \pm 60\) km./sec. per \(10^{6}\) parsecs</span>. |
-| A | \(<span class="ocr_bbox" data-bbox="638,383,647,421" data-page="2">286</span>^{\circ}\) | \(<span class="ocr_bbox" data-bbox="637,545,646,582" data-page="2">269</span>^{\circ}\) |
-| D | \(+<span class="ocr_bbox" data-bbox="648,366,660,421" data-page="2">40^{\circ</span>}\) | \(+<span class="ocr_bbox" data-bbox="648,528,662,584" data-page="2">33^{\circ</span>}\) |
-| \(V_{0}\) | <span class="ocr_bbox" data-bbox="665,384,676,483" data-page="2">306 km./sec</span>. | <span class="ocr_bbox" data-bbox="665,545,675,645" data-page="2">247 km./sec</span>. |
+| X | <span class="ocr_bbox" data-bbox="618,447,628,465" data-page="2">$- 65 \pm 50$</span> | $+ 3 \pm 70$ |
+| Y | <span class="ocr_bbox" data-bbox="589,367,600,470" data-page="2">$+226 \pm 95$</span> | <span class="ocr_bbox" data-bbox="589,527,600,638" data-page="2">$+230 \pm 120$</span> |
+| Z | $-195 \pm 40$ | <span class="ocr_bbox" data-bbox="575,527,586,637" data-page="2">$-133 \pm 70$</span> |
+| K | <span class="ocr_bbox" data-bbox="576,367,588,468" data-page="2">$+465 \pm 50$</span> | <span class="ocr_bbox" data-bbox="617,531,629,832" data-page="2">$+513 \pm 60$</span> km./sec. per $10^{6}$ parsecs. |
+| A | <span class="ocr_bbox" data-bbox="638,383,647,421" data-page="2">$286^{\circ}$</span> | <span class="ocr_bbox" data-bbox="637,545,646,582" data-page="2">$269^{\circ}$</span> |
+| D | <span class="ocr_bbox" data-bbox="648,366,660,421" data-page="2">$+40^{\circ}$</span> | <span class="ocr_bbox" data-bbox="648,528,662,584" data-page="2">$+33^{\circ}$</span> |
+| $V_{0}$ | <span class="ocr_bbox" data-bbox="665,384,676,483" data-page="2">306 km./sec</span>. | <span class="ocr_bbox" data-bbox="665,545,675,645" data-page="2">247 km./sec</span>. |
 
 <!--end-->
 <span class="ocr_bbox" data-bbox="692,223,708,888" data-page="2">For such scanty material, so poorly distributed, the results are
 fairly</span> <span class="ocr_bbox" data-bbox="710,202,722,888" data-page="2">definite. Differences between the two solutions are due largely
 to the</span> <span class="ocr_bbox" data-bbox="725,201,740,888" data-page="2">four Virgo nebulae, which, being the most distant objects and
 all sharing</span> <span class="ocr_bbox" data-bbox="741,202,758,888" data-page="2">the peculiar motion of the cluster, unduly influence the
-value of K and</span> <span class="ocr_bbox" data-bbox="758,202,773,888" data-page="2">hence of \(V_{0}\). New data on more distant objects
-will be required to reduce</span> <span class="ocr_bbox" data-bbox="774,202,790,888" data-page="2">the effect of such peculiar motion.
-Meanwhile round numbers, inter<span class="ocr_bbox" data-bbox="791,202,806,889" data-page="2"></span>mediate between the two solutions, will
-represent the probable order of</span> <span class="ocr_bbox" data-bbox="804,202,821,888" data-page="2">the values. For instance, let \(A =
-277^{\circ}\), \(D = +36^{\circ}\) (Gal. long. \( = 32^{\circ</span>}\), <span class="ocr_bbox" data-bbox="823,197,839,887" data-page="2">lat.
-\( = +18^{\circ}\)), \(V_{0} = 280\) km./sec., \(K = +500\) km./sec.
-per million par</span>-
+value of K and</span> hence of <span class="ocr_bbox" data-bbox="758,202,773,888" data-page="2">$V_{0}$</span>. New data on more distant objects will
+be required to reduce <span class="ocr_bbox" data-bbox="774,202,790,888" data-page="2">the effect of such peculiar motion. Meanwhile
+round numbers, inter<span class="ocr_bbox" data-bbox="791,202,806,889" data-page="2"></span>mediate between the two solutions, will represent
+the probable order of</span> the values. For instance, let <span class="ocr_bbox" data-bbox="804,202,821,888" data-page="2">$A = 277^{\circ}$</span>,
+$D = +36^{\circ}$ (Gal. long. $= 32^{\circ}$, lat. <span class="ocr_bbox" data-bbox="823,197,839,887" data-page="2">$= +18^{\circ}$</span>),
+$V_{0} = 280$ km./sec., $K = +500$ km./sec. per million par-
 
 <span class="ocr_bbox" data-bbox="137,121,150,808" data-page="3">secs. Mr. Strömberg has very kindly checked the general order of these</span>
 <span class="ocr_bbox" data-bbox="154,121,167,743" data-page="3">values by independent solutions for different groupings of the data</span>. <span class="ocr_bbox" data-bbox="170,142,183,807" data-page="3">A
 constant term, introduced into the equations, was found to be small</span>
 <span class="ocr_bbox" data-bbox="187,121,200,807" data-page="3">and negative. This seems to dispose of the necessity for the old
-constant</span> \(<span class="ocr_bbox" data-bbox="203,120,216,807" data-page="3">K\) term. Solutions of this sort have been published by
-Lundmark, who</span> <span class="ocr_bbox" data-bbox="216,121,232,806" data-page="3">replaced the old \(K\) by \(k+lr+mr^{2}\). His favored
-solution gave \(k=513</span>\), <span class="ocr_bbox" data-bbox="234,120,249,807" data-page="3">as against the former value of the order of
+constant</span> <span class="ocr_bbox" data-bbox="203,120,216,807" data-page="3">$K$</span> term. Solutions of this sort have been published by
+Lundmark, who replaced the old <span class="ocr_bbox" data-bbox="216,121,232,806" data-page="3">$K$</span> by $k+lr+mr^{2}$. His favored
+solution gave $k=513$, <span class="ocr_bbox" data-bbox="234,120,249,807" data-page="3">as against the former value of the order of
 700, and hence offered little</span> <span class="ocr_bbox" data-bbox="253,121,266,220" data-page="3">advantage</span>.
 
 <!--table: 3-->
 |  |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  | \(r\) | \(m\) | \(<span class="ocr_bbox" data-bbox="307,662,315,682" data-page="3">M</span>_{c}\) |  |
+|  |  |  | $r$ | $m$ | <span class="ocr_bbox" data-bbox="307,662,315,682" data-page="3">$M_{c}$</span> |  |
 | N. G. C. | <span class="ocr_bbox" data-bbox="307,197,313,243" data-page="3">OBJECT</span> |  |  |  |  |  |
-|  | 278 | \(+ 650\) | \(-<span class="ocr_bbox" data-bbox="318,432,327,475" data-page="3">110</span>\) | 1.52 | 12.0 | \(–13.9\) |
-|  | <span class="ocr_bbox" data-bbox="333,205,340,233" data-page="3">404</span> | \(– 25\) | \(– 65\) | ... | 11.1 | .. |
-|  | <span class="ocr_bbox" data-bbox="347,206,354,233" data-page="3">584</span> | \(+1800\) | \(+ 75\) | <span class="ocr_bbox" data-bbox="346,545,354,583" data-page="3">3.45</span> | 10.9 | 16.8 |
-|  | <span class="ocr_bbox" data-bbox="359,205,368,232" data-page="3">936</span> | \(+1300\) | \(+<span class="ocr_bbox" data-bbox="359,433,369,475" data-page="3">115</span>\) | <span class="ocr_bbox" data-bbox="360,546,368,584" data-page="3">2.37</span> | 11.1 | 15.7 |
-|  | <span class="ocr_bbox" data-bbox="374,197,382,233" data-page="3">1023</span> | \(+ 300\) | \(– 10\) | 0.62 | 10.2 | 13.8 |
-|  | 1700 | \(+ 800\) | \(+<span class="ocr_bbox" data-bbox="389,433,399,475" data-page="3">220</span>\) | 1.16 | 12.5 | 12.8 |
-|  | <span class="ocr_bbox" data-bbox="404,196,412,232" data-page="3">2681</span> | \(+ <span class="ocr_bbox" data-bbox="403,307,413,357" data-page="3">700</span>\) | \(– 10\) | 1.42 | 10.7 | 15.0 |
-|  | <span class="ocr_bbox" data-bbox="418,196,426,233" data-page="3">2683</span> | \(+ <span class="ocr_bbox" data-bbox="417,308,427,358" data-page="3">400</span>\) | \(+ 65\) | 0.67 | 9.9 | 14.3 |
-|  | <span class="ocr_bbox" data-bbox="432,196,440,233" data-page="3">2841</span> | \(+ 600\) | \(– 20\) | 1.24 | 9.4 | 16.1 |
-|  | <span class="ocr_bbox" data-bbox="445,196,453,234" data-page="3">3034</span> | \(+ <span class="ocr_bbox" data-bbox="445,307,454,358" data-page="3">290</span>\) | \(–<span class="ocr_bbox" data-bbox="461,434,470,476" data-page="3">105</span>\) | 0.79 | <span class="ocr_bbox" data-bbox="445,663,453,691" data-page="3">9.0</span> | 15.5 |
-|  | <span class="ocr_bbox" data-bbox="461,196,470,233" data-page="3">3115</span> | \(+ 600\) | \(+<span class="ocr_bbox" data-bbox="444,432,454,476" data-page="3">105</span>\) | 1.00 | <span class="ocr_bbox" data-bbox="461,661,469,691" data-page="3">9.5</span> | 15.5 |
-|  | <span class="ocr_bbox" data-bbox="475,196,484,233" data-page="3">3368</span> | \(+ <span class="ocr_bbox" data-bbox="476,308,485,359" data-page="3">940</span>\) | \(+ 70\) | 1.74 | 10.0 | 16.2 |
-|  | <span class="ocr_bbox" data-bbox="489,196,498,232" data-page="3">3379</span> | \(+ <span class="ocr_bbox" data-bbox="488,307,499,358" data-page="3">810</span>\) | \(+ 65\) | 1.49 | 9.4 | 16.4 |
-|  | <span class="ocr_bbox" data-bbox="503,196,511,234" data-page="3">3489</span> | \(+ <span class="ocr_bbox" data-bbox="431,307,441,359" data-page="3">600</span>\) | \(+ 50\) | 1.10 | 11.2 | 14.0 |
-|  | <span class="ocr_bbox" data-bbox="519,196,528,232" data-page="3">3521</span> | \(+ <span class="ocr_bbox" data-bbox="519,307,530,358" data-page="3">730</span>\) | \(+ <span class="ocr_bbox" data-bbox="547,456,555,475" data-page="3">95</span>\) | 1.27 | 10.1 | 15.4 |
-|  | <span class="ocr_bbox" data-bbox="533,196,542,233" data-page="3">3623</span> | \(+ 800\) | \(+ 35\) | 1.53 | 9.9 | 16.0 |
-|  | <span class="ocr_bbox" data-bbox="548,196,555,232" data-page="3">4111</span> | \(+ 800\) | \(– <span class="ocr_bbox" data-bbox="519,432,529,474" data-page="3">95</span>\) | 1.79 | 10.1 | 16.1 |
-|  | <span class="ocr_bbox" data-bbox="561,196,569,233" data-page="3">4526</span> | \(+ <span class="ocr_bbox" data-bbox="560,306,571,357" data-page="3">580</span>\) | \(– 20\) | 1.20 | 11.1 | 14.3 |
-|  | <span class="ocr_bbox" data-bbox="577,196,586,233" data-page="3">4565</span> | \(+<span class="ocr_bbox" data-bbox="577,307,587,357" data-page="3">1100</span>\) | \(– 75\) | 2.<span class="ocr_bbox" data-bbox="532,432,543,475" data-page="3">35</span> | 11.0 | 15.9 |
-|  | <span class="ocr_bbox" data-bbox="592,196,599,233" data-page="3">4594</span> | \(+<span class="ocr_bbox" data-bbox="591,307,600,358" data-page="3">1140</span>\) | \(+ 25\) | 2.23 | 9.1 | <span class="ocr_bbox" data-bbox="590,771,599,806" data-page="3">17.6</span> |
-|  | <span class="ocr_bbox" data-bbox="605,197,613,232" data-page="3">5005</span> | \(+ <span class="ocr_bbox" data-bbox="604,307,615,358" data-page="3">900</span>\) | \(-130\) | 2.06 | 11.1 | 15.5 |
-|  | <span class="ocr_bbox" data-bbox="619,197,627,232" data-page="3">5866</span> | \(+ 650\) | \(-<span class="ocr_bbox" data-bbox="618,432,627,475" data-page="3">215</span>\) | 1.73 | 11.7 | \(–14.5\) |
-| <span class="ocr_bbox" data-bbox="636,121,644,167" data-page="3">Mean</span> |  |  |  | 10.5 | \(–15.3\) |  |
+|  | 278 | $+ 650$ | <span class="ocr_bbox" data-bbox="318,432,327,475" data-page="3">$-110$</span> | 1.52 | 12.0 | $–13.9$ |
+|  | <span class="ocr_bbox" data-bbox="333,205,340,233" data-page="3">404</span> | $– 25$ | $– 65$ | ... | 11.1 | .. |
+|  | <span class="ocr_bbox" data-bbox="347,206,354,233" data-page="3">584</span> | $+1800$ | $+ 75$ | <span class="ocr_bbox" data-bbox="346,545,354,583" data-page="3">3.45</span> | 10.9 | 16.8 |
+|  | <span class="ocr_bbox" data-bbox="359,205,368,232" data-page="3">936</span> | $+1300$ | <span class="ocr_bbox" data-bbox="359,433,369,475" data-page="3">$+115$</span> | <span class="ocr_bbox" data-bbox="360,546,368,584" data-page="3">2.37</span> | 11.1 | 15.7 |
+|  | <span class="ocr_bbox" data-bbox="374,197,382,233" data-page="3">1023</span> | $+ 300$ | $– 10$ | 0.62 | 10.2 | 13.8 |
+|  | 1700 | $+ 800$ | <span class="ocr_bbox" data-bbox="389,433,399,475" data-page="3">$+220$</span> | 1.16 | 12.5 | 12.8 |
+|  | <span class="ocr_bbox" data-bbox="404,196,412,232" data-page="3">2681</span> | <span class="ocr_bbox" data-bbox="403,307,413,357" data-page="3">$+ 700$</span> | $– 10$ | 1.42 | 10.7 | 15.0 |
+|  | <span class="ocr_bbox" data-bbox="418,196,426,233" data-page="3">2683</span> | <span class="ocr_bbox" data-bbox="417,308,427,358" data-page="3">$+ 400$</span> | $+ 65$ | 0.67 | 9.9 | 14.3 |
+|  | <span class="ocr_bbox" data-bbox="432,196,440,233" data-page="3">2841</span> | $+ 600$ | $– 20$ | 1.24 | 9.4 | 16.1 |
+|  | <span class="ocr_bbox" data-bbox="445,196,453,234" data-page="3">3034</span> | <span class="ocr_bbox" data-bbox="445,307,454,358" data-page="3">$+ 290$</span> | <span class="ocr_bbox" data-bbox="461,434,470,476" data-page="3">$–105$</span> | 0.79 | <span class="ocr_bbox" data-bbox="445,663,453,691" data-page="3">9.0</span> | 15.5 |
+|  | <span class="ocr_bbox" data-bbox="461,196,470,233" data-page="3">3115</span> | $+ 600$ | <span class="ocr_bbox" data-bbox="444,432,454,476" data-page="3">$+105$</span> | 1.00 | <span class="ocr_bbox" data-bbox="461,661,469,691" data-page="3">9.5</span> | 15.5 |
+|  | <span class="ocr_bbox" data-bbox="475,196,484,233" data-page="3">3368</span> | <span class="ocr_bbox" data-bbox="476,308,485,359" data-page="3">$+ 940$</span> | $+ 70$ | 1.74 | 10.0 | 16.2 |
+|  | <span class="ocr_bbox" data-bbox="489,196,498,232" data-page="3">3379</span> | <span class="ocr_bbox" data-bbox="488,307,499,358" data-page="3">$+ 810$</span> | $+ 65$ | 1.49 | 9.4 | 16.4 |
+|  | <span class="ocr_bbox" data-bbox="503,196,511,234" data-page="3">3489</span> | <span class="ocr_bbox" data-bbox="431,307,441,359" data-page="3">$+ 600$</span> | $+ 50$ | 1.10 | 11.2 | 14.0 |
+|  | <span class="ocr_bbox" data-bbox="519,196,528,232" data-page="3">3521</span> | <span class="ocr_bbox" data-bbox="519,307,530,358" data-page="3">$+ 730$</span> | <span class="ocr_bbox" data-bbox="547,456,555,475" data-page="3">$+ 95$</span> | 1.27 | 10.1 | 15.4 |
+|  | <span class="ocr_bbox" data-bbox="533,196,542,233" data-page="3">3623</span> | $+ 800$ | $+ 35$ | 1.53 | 9.9 | 16.0 |
+|  | <span class="ocr_bbox" data-bbox="548,196,555,232" data-page="3">4111</span> | $+ 800$ | <span class="ocr_bbox" data-bbox="519,432,529,474" data-page="3">$– 95$</span> | 1.79 | 10.1 | 16.1 |
+|  | <span class="ocr_bbox" data-bbox="561,196,569,233" data-page="3">4526</span> | <span class="ocr_bbox" data-bbox="560,306,571,357" data-page="3">$+ 580$</span> | $– 20$ | 1.20 | 11.1 | 14.3 |
+|  | <span class="ocr_bbox" data-bbox="577,196,586,233" data-page="3">4565</span> | <span class="ocr_bbox" data-bbox="577,307,587,357" data-page="3">$+1100$</span> | $– 75$ | 2.<span class="ocr_bbox" data-bbox="532,432,543,475" data-page="3">35</span> | 11.0 | 15.9 |
+|  | <span class="ocr_bbox" data-bbox="592,196,599,233" data-page="3">4594</span> | <span class="ocr_bbox" data-bbox="591,307,600,358" data-page="3">$+1140$</span> | $+ 25$ | 2.23 | 9.1 | <span class="ocr_bbox" data-bbox="590,771,599,806" data-page="3">17.6</span> |
+|  | <span class="ocr_bbox" data-bbox="605,197,613,232" data-page="3">5005</span> | <span class="ocr_bbox" data-bbox="604,307,615,358" data-page="3">$+ 900$</span> | $-130$ | 2.06 | 11.1 | 15.5 |
+|  | <span class="ocr_bbox" data-bbox="619,197,627,232" data-page="3">5866</span> | $+ 650$ | <span class="ocr_bbox" data-bbox="618,432,627,475" data-page="3">$-215$</span> | 1.73 | 11.7 | $–14.5$ |
+| <span class="ocr_bbox" data-bbox="636,121,644,167" data-page="3">Mean</span> |  |  |  | 10.5 | $–15.3$ |  |
 
 <!--end-->
 The residuals for the two solutions given above average 150 and 110
@@ -199,26 +197,26 @@ velocities <span class="ocr_bbox" data-bbox="931,15,456,31" data-page="0">Downlo
 January 5, 2026 from IP address 45.113.94.70</span>.
 
 <span class="ocr_bbox" data-bbox="135,197,149,884" data-page="4">corrected for solar motion. The result, 745 km./sec. for a distance of</span>
-\(<span class="ocr_bbox" data-bbox="151,199,166,882" data-page="4">1.4 \times 10^{6}\) parsecs, falls between the two previous
-solutions and indicates</span> <span class="ocr_bbox" data-bbox="169,197,182,797" data-page="4">a value for K of 530 as against the proposed
-value, 500 km./sec</span>. <span class="ocr_bbox" data-bbox="186,218,199,883" data-page="4">Secondly, the scatter of the individual nebulae
-can be examined by</span> <span class="ocr_bbox" data-bbox="203,197,216,883" data-page="4">assuming the relation between distances and
-velocities as previously</span> <span class="ocr_bbox" data-bbox="220,197,231,882" data-page="4">determined. Distances can then be calculated
-from the velocities cor<span class="ocr_bbox" data-bbox="237,196,249,883" data-page="4"></span>rected for solar motion, and absolute
-magnitudes can be derived from the</span> <span class="ocr_bbox" data-bbox="253,197,266,884" data-page="4">apparent magnitudes. The results
-are given in table 2 and may be</span> <span class="ocr_bbox" data-bbox="270,197,283,883" data-page="4">compared with the distribution of
-absolute magnitudes among the nebulae</span> <span class="ocr_bbox" data-bbox="286,196,299,883" data-page="4">in talbe 1, whose distances are
-derived from other criteria. N. G. C. 404</span> <span class="ocr_bbox" data-bbox="531,499,539,575" data-page="4">FIGURE 1</span> <span class="ocr_bbox" data-bbox="544,304,555,771" data-page="4">Velocity-Distance
-Relation among Extra-Galactic Nebulae</span>. <span class="ocr_bbox" data-bbox="561,289,572,806" data-page="4">Radial velocities, corrected
-for solar motion, are plotted against</span> <span class="ocr_bbox" data-bbox="575,271,584,808" data-page="4">distances estimated from
-involved stars and mean luminosities of</span> <span class="ocr_bbox" data-bbox="589,271,599,807" data-page="4">nebulae in a cluster. The
-black discs and full line represent the</span> <span class="ocr_bbox" data-bbox="603,271,613,805" data-page="4">solution for solar motion
-using the nebulae individually; the circles</span> <span class="ocr_bbox" data-bbox="617,271,627,807" data-page="4">and broken line represent
-the solution combining the nebulae into</span> <span class="ocr_bbox" data-bbox="631,271,642,805" data-page="4">groups; the cross represents
-the mean velocity corresponding to</span> <span class="ocr_bbox" data-bbox="645,271,654,806" data-page="4">the mean distance of 22 nebulae
-whose distances could not be esti<span class="ocr_bbox" data-bbox="658,271,669,426" data-page="4"></span>mated individually</span>. <span class="ocr_bbox" data-bbox="690,197,703,883" data-page="4">can be excluded,
-since the observed velocity is so small that the peculiar</span> <span class="ocr_bbox" data-bbox="707,197,719,883" data-page="4">motion must
-be large in comparison with the distance effect. The object</span> <span class="ocr_bbox" data-bbox="723,197,736,882" data-page="4">is not
+<span class="ocr_bbox" data-bbox="151,199,166,882" data-page="4">$1.4 \times 10^{6}$</span> parsecs, falls between the two previous solutions
+and indicates <span class="ocr_bbox" data-bbox="169,197,182,797" data-page="4">a value for K of 530 as against the proposed value, 500
+km./sec</span>. <span class="ocr_bbox" data-bbox="186,218,199,883" data-page="4">Secondly, the scatter of the individual nebulae can be
+examined by</span> <span class="ocr_bbox" data-bbox="203,197,216,883" data-page="4">assuming the relation between distances and velocities as
+previously</span> <span class="ocr_bbox" data-bbox="220,197,231,882" data-page="4">determined. Distances can then be calculated from the
+velocities cor<span class="ocr_bbox" data-bbox="237,196,249,883" data-page="4"></span>rected for solar motion, and absolute magnitudes can be
+derived from the</span> <span class="ocr_bbox" data-bbox="253,197,266,884" data-page="4">apparent magnitudes. The results are given in table 2
+and may be</span> <span class="ocr_bbox" data-bbox="270,197,283,883" data-page="4">compared with the distribution of absolute magnitudes among
+the nebulae</span> <span class="ocr_bbox" data-bbox="286,196,299,883" data-page="4">in talbe 1, whose distances are derived from other
+criteria. N. G. C. 404</span> <span class="ocr_bbox" data-bbox="531,499,539,575" data-page="4">FIGURE 1</span> <span class="ocr_bbox" data-bbox="544,304,555,771" data-page="4">Velocity-Distance Relation among
+Extra-Galactic Nebulae</span>. <span class="ocr_bbox" data-bbox="561,289,572,806" data-page="4">Radial velocities, corrected for solar motion,
+are plotted against</span> <span class="ocr_bbox" data-bbox="575,271,584,808" data-page="4">distances estimated from involved stars and mean
+luminosities of</span> <span class="ocr_bbox" data-bbox="589,271,599,807" data-page="4">nebulae in a cluster. The black discs and full line
+represent the</span> <span class="ocr_bbox" data-bbox="603,271,613,805" data-page="4">solution for solar motion using the nebulae
+individually; the circles</span> <span class="ocr_bbox" data-bbox="617,271,627,807" data-page="4">and broken line represent the solution
+combining the nebulae into</span> <span class="ocr_bbox" data-bbox="631,271,642,805" data-page="4">groups; the cross represents the mean
+velocity corresponding to</span> <span class="ocr_bbox" data-bbox="645,271,654,806" data-page="4">the mean distance of 22 nebulae whose
+distances could not be esti<span class="ocr_bbox" data-bbox="658,271,669,426" data-page="4"></span>mated individually</span>. <span class="ocr_bbox" data-bbox="690,197,703,883" data-page="4">can be excluded, since
+the observed velocity is so small that the peculiar</span> <span class="ocr_bbox" data-bbox="707,197,719,883" data-page="4">motion must be
+large in comparison with the distance effect. The object</span> <span class="ocr_bbox" data-bbox="723,197,736,882" data-page="4">is not
 necessarily an exception, however, since a distance can be assigned</span>
 <span class="ocr_bbox" data-bbox="740,196,752,883" data-page="4">for which the peculiar motion and the absolute magnitude are both
 within</span> <span class="ocr_bbox" data-bbox="752,196,771,883" data-page="4">the range previously determined. The two mean magnitudes, -15.3</span>
@@ -239,35 +237,35 @@ velocities</span>. <span class="ocr_bbox" data-bbox="237,120,249,805" data-page=
 Mr. Humason</span> <span class="ocr_bbox" data-bbox="253,120,266,805" data-page="5">at Mount Wilson has initiated a program of determining
 velocities</span> <span class="ocr_bbox" data-bbox="269,120,280,806" data-page="5">of the most distant nebulae that can be observed with
 confidence</span>. <span class="ocr_bbox" data-bbox="286,120,299,805" data-page="5">These, naturally, are the brightest nebulae in clusters of
-nebulae</span>. <span class="ocr_bbox" data-bbox="301,121,316,807" data-page="5">The first definite result, \(v = +3779 ~km./sec.\) for N. G.
-C. 7619, is</span> <span class="ocr_bbox" data-bbox="318,119,332,807" data-page="5">thoroughly consistent with the present conclusions.
-Corrected for the</span> <span class="ocr_bbox" data-bbox="334,121,349,805" data-page="5">solar motion, this velocity is \(+3910\), which,
-with \(K = 500\), corresponds to</span> <span class="ocr_bbox" data-bbox="350,120,365,804" data-page="5">a distance of \(7.8 \times 10^{6}\)
-parsecs. Since the apparent magnitude is 11.8</span>, <span class="ocr_bbox" data-bbox="369,120,381,807" data-page="5">the absolute magnitude
-at such a distance is \(-17.65\), which is of the</span> <span class="ocr_bbox" data-bbox="385,120,398,805" data-page="5">right order for the
-brightest nebulae in a cluster. A preliminary dis<span class="ocr_bbox" data-bbox="402,121,415,804" data-page="5"></span>tance, derived
-independently from the cluster of which this nebula appears</span> <span class="ocr_bbox" data-bbox="416,120,431,591" data-page="5">to be a
-member, is of the order of \(7 \times 10^{6}\) parsecs</span>. <span class="ocr_bbox" data-bbox="435,142,448,805" data-page="5">New data to be
-expected in the near future may modify the significance</span> <span class="ocr_bbox" data-bbox="451,120,464,806" data-page="5">of the present
-investigation or, if confirmatory, will lead to a solution</span> <span class="ocr_bbox" data-bbox="467,120,481,804" data-page="5">having many
-times the weight. For this reason it is thought premature</span> <span class="ocr_bbox" data-bbox="484,120,497,806" data-page="5">to discuss
-in detail the obvious consequences of the present results. For</span>
-<span class="ocr_bbox" data-bbox="501,120,514,805" data-page="5">example, if the solar motion with respect to the clusters represents
-the</span> <span class="ocr_bbox" data-bbox="517,120,530,805" data-page="5">rotation of the galactic system, this motion could be subtracted
-from the</span> <span class="ocr_bbox" data-bbox="534,120,547,807" data-page="5">results for the nebulae and the remainder would represent the
-motion of</span> <span class="ocr_bbox" data-bbox="550,120,563,691" data-page="5">the galactic system with respect to the extra-galactic
-nebulae</span>. <span class="ocr_bbox" data-bbox="567,140,580,805" data-page="5">The outstanding feature, however, is the possibility that the
-velocity</span>-<span class="ocr_bbox" data-bbox="584,120,596,804" data-page="5">distance relation may represent the de Sitter effect, and
-hence that numer<span class="ocr_bbox" data-bbox="600,119,613,806" data-page="5"></span>ical data may be introduced into discussions of the
-general curvature of</span> <span class="ocr_bbox" data-bbox="617,119,630,805" data-page="5">space. In the de Sitter cosmology, displacements
-of the spectra arise</span> <span class="ocr_bbox" data-bbox="631,119,646,805" data-page="5">from two sources, an apparent slowing down of
-atomic vibrations and a</span> <span class="ocr_bbox" data-bbox="648,119,663,805" data-page="5">general tendency of material particles to
-scatter. The latter involves an</span> <span class="ocr_bbox" data-bbox="666,119,677,804" data-page="5">acceleration and hence introduces the
-element of time. The relative im<span class="ocr_bbox" data-bbox="681,119,696,805" data-page="5"></span>portance of these two effects should
-determine the form of the relation</span> <span class="ocr_bbox" data-bbox="699,119,711,805" data-page="5">between distances and observed
-velocities; and in this connection it may</span> <span class="ocr_bbox" data-bbox="716,119,729,805" data-page="5">be emphasized that the
-linear relation found in the present discussion is a</span> <span class="ocr_bbox" data-bbox="732,119,746,697" data-page="5">first
-approximation representing a restricted range in distance<span class="ocr_bbox" data-bbox="753,142,764,712" data-page="5"></span>.
+nebulae</span>. The first definite result, <span class="ocr_bbox" data-bbox="301,121,316,807" data-page="5">$v = +3779 ~km./sec.$</span> for N. G. C.
+7619, is <span class="ocr_bbox" data-bbox="318,119,332,807" data-page="5">thoroughly consistent with the present conclusions. Corrected
+for the</span> solar motion, this velocity is <span class="ocr_bbox" data-bbox="334,121,349,805" data-page="5">$+3910$</span>, which, with $K = 500$,
+corresponds to a distance of <span class="ocr_bbox" data-bbox="350,120,365,804" data-page="5">$7.8 \times 10^{6}$</span> parsecs. Since the
+apparent magnitude is 11.8, the absolute magnitude at such a distance
+is <span class="ocr_bbox" data-bbox="369,120,381,807" data-page="5">$-17.65$</span>, which is of the <span class="ocr_bbox" data-bbox="385,120,398,805" data-page="5">right order for the brightest nebulae in
+a cluster. A preliminary dis<span class="ocr_bbox" data-bbox="402,121,415,804" data-page="5"></span>tance, derived independently from the
+cluster of which this nebula appears</span> to be a member, is of the order
+of <span class="ocr_bbox" data-bbox="416,120,431,591" data-page="5">$7 \times 10^{6}$</span> parsecs. <span class="ocr_bbox" data-bbox="435,142,448,805" data-page="5">New data to be expected in the near
+future may modify the significance</span> <span class="ocr_bbox" data-bbox="451,120,464,806" data-page="5">of the present investigation or, if
+confirmatory, will lead to a solution</span> <span class="ocr_bbox" data-bbox="467,120,481,804" data-page="5">having many times the weight.
+For this reason it is thought premature</span> <span class="ocr_bbox" data-bbox="484,120,497,806" data-page="5">to discuss in detail the
+obvious consequences of the present results. For</span> <span class="ocr_bbox" data-bbox="501,120,514,805" data-page="5">example, if the solar
+motion with respect to the clusters represents the</span> <span class="ocr_bbox" data-bbox="517,120,530,805" data-page="5">rotation of the
+galactic system, this motion could be subtracted from the</span> <span class="ocr_bbox" data-bbox="534,120,547,807" data-page="5">results for
+the nebulae and the remainder would represent the motion of</span> <span class="ocr_bbox" data-bbox="550,120,563,691" data-page="5">the
+galactic system with respect to the extra-galactic nebulae</span>. <span class="ocr_bbox" data-bbox="567,140,580,805" data-page="5">The
+outstanding feature, however, is the possibility that the velocity</span>-
+<span class="ocr_bbox" data-bbox="584,120,596,804" data-page="5">distance relation may represent the de Sitter effect, and hence that
+numer<span class="ocr_bbox" data-bbox="600,119,613,806" data-page="5"></span>ical data may be introduced into discussions of the general
+curvature of</span> <span class="ocr_bbox" data-bbox="617,119,630,805" data-page="5">space. In the de Sitter cosmology, displacements of the
+spectra arise</span> <span class="ocr_bbox" data-bbox="631,119,646,805" data-page="5">from two sources, an apparent slowing down of atomic
+vibrations and a</span> <span class="ocr_bbox" data-bbox="648,119,663,805" data-page="5">general tendency of material particles to scatter.
+The latter involves an</span> <span class="ocr_bbox" data-bbox="666,119,677,804" data-page="5">acceleration and hence introduces the element
+of time. The relative im<span class="ocr_bbox" data-bbox="681,119,696,805" data-page="5"></span>portance of these two effects should determine
+the form of the relation</span> <span class="ocr_bbox" data-bbox="699,119,711,805" data-page="5">between distances and observed velocities;
+and in this connection it may</span> <span class="ocr_bbox" data-bbox="716,119,729,805" data-page="5">be emphasized that the linear relation
+found in the present discussion is a</span> <span class="ocr_bbox" data-bbox="732,119,746,697" data-page="5">first approximation representing
+a restricted range in distance<span class="ocr_bbox" data-bbox="753,142,764,712" data-page="5"></span>.
 
 - Mt. Wilson Contr., No. 324; Astroph. J., Chicago, Ill., 64, 1926
   (321</span>).

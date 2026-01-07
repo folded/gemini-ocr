@@ -24,7 +24,7 @@
 <span class="ocr_bbox" data-bbox="492,401,503,668" data-page="0">Communicated January 17, 1929</span>
 
 <span class="ocr_bbox" data-bbox="518,218,532,883" data-page="0">Determinations of the motion of the sun with respect to the extra</span>-
-<span class="ocr_bbox" data-bbox="534,196,549,882" data-page="0">galactic nebulae have involved a $K$ term of several hundred kilometers</span>
+galactic nebulae have involved a <span class="ocr_bbox" data-bbox="534,196,549,882" data-page="0">$K$</span> term of several hundred kilometers
 <span class="ocr_bbox" data-bbox="550,196,567,883" data-page="0">which appears to be variable. Explanations of this paradox have been</span>
 <span class="ocr_bbox" data-bbox="567,197,582,880" data-page="0">sought in a correlation between apparent radial velocities and distances</span>,
 <span class="ocr_bbox" data-bbox="585,197,598,884" data-page="0">but so far the results have not been convincing. The present paper is a</span>
@@ -41,7 +41,7 @@
 <span class="ocr_bbox" data-bbox="750,198,764,883" data-page="0">ments. A study of these nebulae, together with those in which any stars</span>
 <span class="ocr_bbox" data-bbox="767,198,780,885" data-page="0">at all can be recognized, indicates the probability of an approximately</span>
 <span class="ocr_bbox" data-bbox="783,198,797,883" data-page="0">uniform upper limit to the absolute luminosity of stars, in the late-type</span>
-<span class="ocr_bbox" data-bbox="799,198,813,855" data-page="0">spirals and irregular nebulae at least, of the order of $M$ (photographic</span>) =
+spirals and irregular nebulae at least, of the order of <span class="ocr_bbox" data-bbox="799,198,813,855" data-page="0">$M$</span> (photographic) =
 -<span class="ocr_bbox" data-bbox="815,200,829,883" data-page="0">6.3.1 The apparent luminosities of the brightest stars in such nebulae</span>
 <span class="ocr_bbox" data-bbox="832,197,845,883" data-page="0">are thus criteria which, although rough and to be applied with caution</span>,
 
@@ -84,19 +84,19 @@
 | <span class="ocr_bbox" data-bbox="556,192,564,228" data-page="1">4649</span>         | ..    | <span class="ocr_bbox" data-bbox="515,406,523,436" data-page="1">2.0</span>   | +<span class="ocr_bbox" data-bbox="555,517,565,569" data-page="1">1090</span>    | <span class="ocr_bbox" data-bbox="363,649,371,678" data-page="1">9.5</span>   | <span class="ocr_bbox" data-bbox="321,300,331,336" data-page="1">17.0</span>     |
 | <span class="ocr_bbox" data-bbox="572,116,580,163" data-page="1">Mean</span>         |       |       |          |       | -15.5    |
 
-$<span class="ocr_bbox" data-bbox="591,132,603,622" data-page="1">m_c$ = photographic magnitude of brightest stars involved</span>.
-$<span class="ocr_bbox" data-bbox="605,135,616,740" data-page="1">r$ = distance in units of $10^6$ parsecs. The first two are Shapley's values</span>.
+<span class="ocr_bbox" data-bbox="591,132,603,622" data-page="1">$m_c$</span> = photographic magnitude of brightest stars involved.
+<span class="ocr_bbox" data-bbox="605,135,616,740" data-page="1">$r$</span> = distance in units of $10^6$ parsecs. The first two are Shapley's values.
 $v_c$ = <span class="ocr_bbox" data-bbox="618,168,629,802" data-page="1">measured velocities in km./sec. N. G. C. 6822, 221, 224 and 5457 are recent</span>
 <span class="ocr_bbox" data-bbox="632,209,643,451" data-page="1">determinations by Humason</span>.
-$<span class="ocr_bbox" data-bbox="646,132,656,803" data-page="1">m_v$ = Holetschek's visual magnitude as corrected by Hopmann. The first three</span>
-<span class="ocr_bbox" data-bbox="660,209,671,801" data-page="1">objects were not measured by Holetschek, and the values of $m_v$ represent</span>
+<span class="ocr_bbox" data-bbox="646,132,656,803" data-page="1">$m_v$</span> = Holetschek's visual magnitude as corrected by Hopmann. The first three
+objects were not measured by Holetschek, and the values of <span class="ocr_bbox" data-bbox="660,209,671,801" data-page="1">$m_v$</span> represent
 <span class="ocr_bbox" data-bbox="673,209,684,727" data-page="1">estimates by the author based upon such data as are available</span>.
-$M_v$ = <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">total visual absolute magnitude computed from $m_v$ and $r</span>$.
+$M_v$ = total visual absolute magnitude computed from <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">$m_v$</span> and $r$.
 <!--end-->
 
 <span class="ocr_bbox" data-bbox="718,138,731,804" data-page="1">Finally, the nebulae themselves appear to be of a definite order of</span>
 <span class="ocr_bbox" data-bbox="735,117,748,802" data-page="1">absolute luminosity, exhibiting a range of four or five magnitudes about</span>
-<span class="ocr_bbox" data-bbox="749,116,766,802" data-page="1">an average value $M$ (visual) = -15.2.1 The application of this statistical</span>
+an average value <span class="ocr_bbox" data-bbox="749,116,766,802" data-page="1">$M$</span> (visual) = -15.2.1 The application of this statistical
 <span class="ocr_bbox" data-bbox="767,116,782,801" data-page="1">average to individual cases can rarely be used to advantage, but where</span>
 <span class="ocr_bbox" data-bbox="785,116,797,801" data-page="1">considerable numbers are involved, and especially in the various clusters</span>
 <span class="ocr_bbox" data-bbox="799,117,814,802" data-page="1">of nebulae, mean apparent luminosities of the nebulae themselves offer</span>
@@ -116,7 +116,7 @@ $M_v$ = <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">total v
 <span class="ocr_bbox" data-bbox="229,197,242,883" data-page="2">of stellar luminosity, are subject to considerable probable errors but are</span>
 <span class="ocr_bbox" data-bbox="245,197,259,883" data-page="2">believed to be the most reasonable values at present available. The last</span>
 <span class="ocr_bbox" data-bbox="262,197,275,883" data-page="2">four objects appear to be in the Virgo Cluster. The distance assigned</span>
-<span class="ocr_bbox" data-bbox="278,197,291,883" data-page="2">to the cluster, $2 \times 10^6$ parsecs, is derived from the distribution of nebular</span>
+to the cluster, <span class="ocr_bbox" data-bbox="278,197,291,883" data-page="2">$2 \times 10^6$</span> parsecs, is derived from the distribution of nebular
 <span class="ocr_bbox" data-bbox="295,197,308,884" data-page="2">luminosities, together with luminosities of stars in some of the later-type</span>
 <span class="ocr_bbox" data-bbox="312,198,325,883" data-page="2">spirals, and differs somewhat from the Harvard estimate of ten million</span>
 <span class="ocr_bbox" data-bbox="328,197,342,309" data-page="2">light years.2</span>
@@ -124,12 +124,12 @@ $M_v$ = <span class="ocr_bbox" data-bbox="688,197,698,651" data-page="1">total v
 <span class="ocr_bbox" data-bbox="345,220,356,883" data-page="2">The data in the table indicate a linear correlation between distances and</span>
 <span class="ocr_bbox" data-bbox="362,198,375,883" data-page="2">velocities, whether the latter are used directly or corrected for solar motion</span>,
 <span class="ocr_bbox" data-bbox="376,199,393,884" data-page="2">according to the older solutions. This suggests a new solution for the solar</span>
-<span class="ocr_bbox" data-bbox="395,199,406,883" data-page="2">motion in which the distances are introduced as coefficients of the $K$ term</span>,
+motion in which the distances are introduced as coefficients of the <span class="ocr_bbox" data-bbox="395,199,406,883" data-page="2">$K$</span> term,
 <span class="ocr_bbox" data-bbox="411,198,425,885" data-page="2">i. e., the velocities are assumed to vary directly with the distances, and</span>
-<span class="ocr_bbox" data-bbox="426,198,442,885" data-page="2">hence $K$ represents the velocity at unit distance due to this effect. The</span>
+hence <span class="ocr_bbox" data-bbox="426,198,442,885" data-page="2">$K$</span> represents the velocity at unit distance due to this effect. The
 <span class="ocr_bbox" data-bbox="444,199,458,582" data-page="2">equations of condition then take the form</span>
 
-$$ <span class="ocr_bbox" data-bbox="473,295,488,787" data-page="2">rK + X \cos \alpha \cos \delta + Y \sin \alpha \cos \delta + Z \sin \delta = v</span>. $$
+<span class="ocr_bbox" data-bbox="473,295,488,787" data-page="2">$$ rK + X \cos \alpha \cos \delta + Y \sin \alpha \cos \delta + Z \sin \delta = v. $$</span>
 
 <span class="ocr_bbox" data-bbox="503,200,516,885" data-page="2">Two solutions have been made, one using the 24 nebulae individually</span>,
 <span class="ocr_bbox" data-bbox="519,199,532,885" data-page="2">the other combining them into 9 groups according to proximity in direc</span>-
@@ -137,31 +137,31 @@ $$ <span class="ocr_bbox" data-bbox="473,295,488,787" data-page="2">rK + X \cos 
 
 <span class="ocr_bbox" data-bbox="564,385,572,458" data-page="2">24 OBJECTS</span>
 $X$ = -65 $\pm$ <span class="ocr_bbox" data-bbox="618,447,628,465" data-page="2">50</span>
-$Y$ = +<span class="ocr_bbox" data-bbox="589,367,600,470" data-page="2">226 $\pm$ 95</span>
+$Y$ = +226 <span class="ocr_bbox" data-bbox="589,367,600,470" data-page="2">$\pm$</span> 95
 $Z$ = -195 $\pm$ 40
-$K$ = +4<span class="ocr_bbox" data-bbox="576,367,588,468" data-page="2">65 $\pm$ 50</span>
-$A$ = $<span class="ocr_bbox" data-bbox="638,383,647,421" data-page="2">286</span>^{\circ}$
-$D$ = $+<span class="ocr_bbox" data-bbox="648,366,660,421" data-page="2">40^{\circ</span>}$
+$K$ = +465 <span class="ocr_bbox" data-bbox="576,367,588,468" data-page="2">$\pm$</span> 50
+$A$ = <span class="ocr_bbox" data-bbox="638,383,647,421" data-page="2">$286^{\circ}$</span>
+$D$ = <span class="ocr_bbox" data-bbox="648,366,660,421" data-page="2">$+40^{\circ}$</span>
 $V_o$ = <span class="ocr_bbox" data-bbox="665,384,676,483" data-page="2">306 km./sec</span>.
 
 <span class="ocr_bbox" data-bbox="564,549,572,611" data-page="2">9 GROUPS</span>
 +3 $\pm$ 70
-+<span class="ocr_bbox" data-bbox="589,527,600,638" data-page="2">230 $\pm$ 120</span>
--13<span class="ocr_bbox" data-bbox="575,527,586,637" data-page="2">3 $\pm$ 70</span>
-+513<span class="ocr_bbox" data-bbox="617,531,629,832" data-page="2"> $\pm$ 60 km./sec. per $10^6$ parsecs</span>.
-$<span class="ocr_bbox" data-bbox="637,545,646,582" data-page="2">269</span>^{\circ}$
-$+<span class="ocr_bbox" data-bbox="648,528,662,584" data-page="2">33^{\circ</span>}$
++230 <span class="ocr_bbox" data-bbox="589,527,600,638" data-page="2">$\pm$</span> 120
+-133 <span class="ocr_bbox" data-bbox="575,527,586,637" data-page="2">$\pm$</span> 70
++513 <span class="ocr_bbox" data-bbox="617,531,629,832" data-page="2">$\pm$</span> 60 km./sec. per $10^6$ parsecs.
+<span class="ocr_bbox" data-bbox="637,545,646,582" data-page="2">$269^{\circ}$</span>
+<span class="ocr_bbox" data-bbox="648,528,662,584" data-page="2">$+33^{\circ}$</span>
 <span class="ocr_bbox" data-bbox="665,545,675,645" data-page="2">247 km./sec</span>.
 
 <span class="ocr_bbox" data-bbox="692,223,708,888" data-page="2">For such scanty material, so poorly distributed, the results are fairly</span>
 <span class="ocr_bbox" data-bbox="710,202,722,888" data-page="2">definite. Differences between the two solutions are due largely to the</span>
 <span class="ocr_bbox" data-bbox="725,201,740,888" data-page="2">four Virgo nebulae, which, being the most distant objects and all sharing</span>
-<span class="ocr_bbox" data-bbox="741,202,758,888" data-page="2">the peculiar motion of the cluster, unduly influence the value of $K$ and</span>
-<span class="ocr_bbox" data-bbox="758,202,773,888" data-page="2">hence of $V_o$. New data on more distant objects will be required to reduce</span>
+the peculiar motion of the cluster, unduly influence the value of <span class="ocr_bbox" data-bbox="741,202,758,888" data-page="2">$K$</span> and
+hence of <span class="ocr_bbox" data-bbox="758,202,773,888" data-page="2">$V_o$</span>. New data on more distant objects will be required to reduce
 <span class="ocr_bbox" data-bbox="774,202,790,888" data-page="2">the effect of such peculiar motion. Meanwhile round numbers, inter</span>-
 <span class="ocr_bbox" data-bbox="791,202,806,889" data-page="2">mediate between the two solutions, will represent the probable order of</span>
-<span class="ocr_bbox" data-bbox="804,202,821,888" data-page="2">the values. For instance, let $A = 277^{\circ}$, $D = +36^{\circ}$ (Gal. long. = $32^{\circ</span>}$,
-<span class="ocr_bbox" data-bbox="823,197,839,887" data-page="2">lat. = $+18^{\circ}$), $V_o = 280$ km./sec., $K = +500$ km./sec. per million par</span>-
+the values. For instance, let <span class="ocr_bbox" data-bbox="804,202,821,888" data-page="2">$A = 277^{\circ}$</span>, $D = +36^{\circ}$ (Gal. long. = $32^{\circ}$,
+lat. = <span class="ocr_bbox" data-bbox="823,197,839,887" data-page="2">$+18^{\circ}$</span>), $V_o = 280$ km./sec., $K = +500$ km./sec. per million par-
 
 <!--page-->
 <span class="ocr_bbox" data-bbox="108,120,118,230" data-page="3">VOL. 15, 1929</span> <span class="ocr_bbox" data-bbox="108,346,118,586" data-page="3">ASTRONOMY: E. HUBBLE</span> <span class="ocr_bbox" data-bbox="110,781,117,807" data-page="3">171</span>
@@ -171,8 +171,8 @@ $+<span class="ocr_bbox" data-bbox="648,528,662,584" data-page="2">33^{\circ</sp
 
 <span class="ocr_bbox" data-bbox="170,142,183,807" data-page="3">A constant term, introduced into the equations, was found to be small</span>
 <span class="ocr_bbox" data-bbox="187,121,200,807" data-page="3">and negative. This seems to dispose of the necessity for the old constant</span>
-$<span class="ocr_bbox" data-bbox="203,120,216,807" data-page="3">K$ term. Solutions of this sort have been published by Lundmark,3 who</span>
-<span class="ocr_bbox" data-bbox="216,121,232,806" data-page="3">replaced the old $K$ by $k + lr + mr^2$. His favored solution gave $k = 513</span>$,
+<span class="ocr_bbox" data-bbox="203,120,216,807" data-page="3">$K$</span> term. Solutions of this sort have been published by Lundmark,3 who
+replaced the old <span class="ocr_bbox" data-bbox="216,121,232,806" data-page="3">$K$</span> by $k + lr + mr^2$. His favored solution gave $k = 513$,
 <span class="ocr_bbox" data-bbox="234,120,249,807" data-page="3">as against the former value of the order of 700, and hence offered little</span>
 <span class="ocr_bbox" data-bbox="253,121,266,220" data-page="3">advantage</span>.
 
@@ -224,8 +224,8 @@ $<span class="ocr_bbox" data-bbox="203,120,216,807" data-page="3">K$ term. Solut
 <span class="ocr_bbox" data-bbox="108,198,115,225" data-page="4">172</span> <span class="ocr_bbox" data-bbox="107,421,116,662" data-page="4">ASTRONOMY: E. HUBBLE</span> <span class="ocr_bbox" data-bbox="108,766,116,882" data-page="4">PROC. N. A. S</span>.
 
 <span class="ocr_bbox" data-bbox="135,197,149,884" data-page="4">corrected for solar motion. The result, 745 km./sec. for a distance of</span>
-$<span class="ocr_bbox" data-bbox="151,199,166,882" data-page="4">1.4 \times 10^6$ parsecs, falls between the two previous solutions and indicates</span>
-<span class="ocr_bbox" data-bbox="169,197,182,797" data-page="4">a value for $K$ of 530 as against the proposed value, 500 km./sec</span>.
+<span class="ocr_bbox" data-bbox="151,199,166,882" data-page="4">$1.4 \times 10^6$</span> parsecs, falls between the two previous solutions and indicates
+a value for <span class="ocr_bbox" data-bbox="169,197,182,797" data-page="4">$K$</span> of 530 as against the proposed value, 500 km./sec.
 
 <span class="ocr_bbox" data-bbox="186,218,199,883" data-page="4">Secondly, the scatter of the individual nebulae can be examined by</span>
 <span class="ocr_bbox" data-bbox="203,197,216,883" data-page="4">assuming the relation between distances and velocities as previously</span>
@@ -276,14 +276,14 @@ mated individually.
 <span class="ocr_bbox" data-bbox="253,120,266,805" data-page="5">at Mount Wilson has initiated a program of determining velocities</span>
 <span class="ocr_bbox" data-bbox="269,120,280,806" data-page="5">of the most distant nebulae that can be observed with confidence</span>.
 <span class="ocr_bbox" data-bbox="286,120,299,805" data-page="5">These, naturally, are the brightest nebulae in clusters of nebulae</span>.
-<span class="ocr_bbox" data-bbox="301,121,316,807" data-page="5">The first definite result, $v = + 3779$ km./sec. for N. G. C. 7619, is</span>
+The first definite result, <span class="ocr_bbox" data-bbox="301,121,316,807" data-page="5">$v = + 3779$</span> km./sec. for N. G. C. 7619, is
 <span class="ocr_bbox" data-bbox="318,119,332,807" data-page="5">thoroughly consistent with the present conclusions. Corrected for the</span>
-<span class="ocr_bbox" data-bbox="334,121,349,805" data-page="5">solar motion, this velocity is +3910, which, with $K = 500$, corresponds to</span>
-<span class="ocr_bbox" data-bbox="350,120,365,804" data-page="5">a distance of $7.8 \times 10^6$ parsecs. Since the apparent magnitude is 11.8</span>,
+solar motion, this velocity is +3910, which, with <span class="ocr_bbox" data-bbox="334,121,349,805" data-page="5">$K = 500$</span>, corresponds to
+a distance of <span class="ocr_bbox" data-bbox="350,120,365,804" data-page="5">$7.8 \times 10^6$</span> parsecs. Since the apparent magnitude is 11.8,
 <span class="ocr_bbox" data-bbox="369,120,381,807" data-page="5">the absolute magnitude at such a distance is -17.65, which is of the</span>
 <span class="ocr_bbox" data-bbox="385,120,398,805" data-page="5">right order for the brightest nebulae in a cluster. A preliminary dis</span>-
 <span class="ocr_bbox" data-bbox="402,121,415,804" data-page="5">tance, derived independently from the cluster of which this nebula appears</span>
-<span class="ocr_bbox" data-bbox="416,120,431,591" data-page="5">to be a member, is of the order of $7 \times 10^6$ parsecs</span>.
+to be a member, is of the order of <span class="ocr_bbox" data-bbox="416,120,431,591" data-page="5">$7 \times 10^6$</span> parsecs.
 
 <span class="ocr_bbox" data-bbox="435,142,448,805" data-page="5">New data to be expected in the near future may modify the significance</span>
 <span class="ocr_bbox" data-bbox="451,120,464,806" data-page="5">of the present investigation or, if confirmatory, will lead to a solution</span>

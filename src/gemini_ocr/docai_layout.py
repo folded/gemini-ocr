@@ -1,4 +1,5 @@
 import dataclasses
+import re
 import textwrap
 from collections.abc import Generator, Sequence
 
@@ -38,6 +39,10 @@ class LayoutProcessor:
     ) -> Generator[str, None, None]:
         text_type = block.text_block.type_
         text = block.text_block.text
+        # Fix math formatting: DocAI uses \(...\) for inline math, convert to $...$
+        # We also trim whitespace inside the delimiters to ensure correct rendering (e.g. $ = 32$ instead of $ = 32 $)
+        text = re.sub(r"\\\(\s*(.*?)\s*\\\)", r"$\1$", text)
+        text = re.sub(r"\\\[\s*(.*?)\s*\\\]", r"$$\1$$", text)
 
         if text_type.startswith("heading-"):
             level = int(text_type.split("-")[1])

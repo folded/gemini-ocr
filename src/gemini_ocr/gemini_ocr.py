@@ -35,8 +35,25 @@ class OcrResult:
     def annotate(self) -> str:
         """Annotates the markdown content with bounding box spans."""
 
+        # 1. Identify math ranges to snap to (to avoid inserting tags inside math)
+        math_ranges = []
+        # Pattern matches $$...$$ (DOTALL) or $...$ (inline, allowing newlines for wrapped text)
+        pattern = re.compile(r"(\$\$[\s\S]+?\$\$|\$(?:\\.|[^$])+?\$)")
+        for m in pattern.finditer(self.markdown_content):
+            math_ranges.append((m.start(), m.end()))
+
         insertions = []
-        for bbox, (start, end) in self.bounding_boxes.items():
+        for bbox, (span_start, span_end) in self.bounding_boxes.items():
+            start, end = span_start, span_end
+            # Check for overlap with math ranges
+            for m_start, m_end in math_ranges:
+                # If overlap (we check if the range intersects the math range)
+                if max(start, m_start) < min(end, m_end):
+                    # Snap to the math range
+                    start = m_start
+                    end = m_end
+                    break
+
             length = end - start
             bbox_str = f"{bbox.rect.top},{bbox.rect.left},{bbox.rect.bottom},{bbox.rect.right}"
             start_tag = f'<span class="ocr_bbox" data-bbox="{bbox_str}" data-page="{bbox.page}">'

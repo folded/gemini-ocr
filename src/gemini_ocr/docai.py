@@ -11,18 +11,18 @@ from gemini_ocr import document, settings
 
 
 def _call_docai(
-    settings: settings.Settings,
+    ocr_settings: settings.Settings,
     process_options: documentai.ProcessOptions,
     processor_id: str,
     chunk: document.DocumentChunk,
 ) -> documentai.Document:
-    location = settings.location
+    location = ocr_settings.get_documentai_location()
 
     client = documentai.DocumentProcessorServiceClient(
         client_options=client_options.ClientOptions(api_endpoint=f"{location}-documentai.googleapis.com"),
     )
 
-    name = client.processor_path(settings.project_id, location, processor_id)
+    name = client.processor_path(ocr_settings.project_id, location, processor_id)
 
     raw_document = documentai.RawDocument(content=chunk.data, mime_type=chunk.mime_type)
     request = documentai.ProcessRequest(name=name, raw_document=raw_document, process_options=process_options)
@@ -31,12 +31,12 @@ def _call_docai(
 
 
 def _generate_cache_path(
-    settings: settings.Settings,
+    ocr_settings: settings.Settings,
     process_options: documentai.ProcessOptions,
     processor_id: str,
     chunk: document.DocumentChunk,
 ) -> pathlib.Path | None:
-    if not settings.cache_dir or not settings.cache_docai:
+    if not ocr_settings.cache_dir or not ocr_settings.cache_docai:
         return None
     hasher = hashlib.sha256()
     hasher.update(documentai.ProcessOptions.to_json(process_options, sort_keys=True).encode())
@@ -44,24 +44,24 @@ def _generate_cache_path(
     hasher.update(chunk.document_sha256.encode())
     cache_key = f"{hasher.hexdigest()}_{chunk.start_page}_{chunk.end_page}"
 
-    return pathlib.Path(settings.cache_dir) / "docai" / f"{cache_key}.json"
+    return pathlib.Path(ocr_settings.cache_dir) / "docai" / f"{cache_key}.json"
 
 
 async def process(
-    settings: settings.Settings,
+    ocr_settings: settings.Settings,
     process_options: documentai.ProcessOptions,
     processor_id: str,
     chunk: document.DocumentChunk,
 ) -> documentai.Document:
     """Runs Document AI OCR."""
 
-    cache_path = _generate_cache_path(settings, process_options, processor_id, chunk)
+    cache_path = _generate_cache_path(ocr_settings, process_options, processor_id, chunk)
 
     if cache_path and cache_path.exists():
         logging.debug("Loaded from DocAI cache: %s", cache_path)
         return typing.cast("documentai.Document", documentai.Document.from_json(cache_path.read_text()))
 
-    doc = await asyncio.to_thread(_call_docai, settings, process_options, processor_id, chunk)
+    doc = await asyncio.to_thread(_call_docai, ocr_settings, process_options, processor_id, chunk)
 
     # Save to Cache
     if cache_path:

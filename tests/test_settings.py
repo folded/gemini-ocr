@@ -17,7 +17,7 @@ def test_settings_from_env() -> None:
     with patch.dict(os.environ, env, clear=True):
         s = Settings.from_env()
         assert s.project_id == "env-project"
-        assert s.location == "eu"
+        assert s.get_documentai_location() == "eu"
 
         assert s.layout_processor_id == "env-layout"
         assert s.ocr_processor_id == "env-ocr"
@@ -28,6 +28,17 @@ def test_settings_from_env() -> None:
     with patch.dict(os.environ, env, clear=True):
         s = Settings.from_env()
         assert s.quota_project_id == "env-quota"
+
+    # Test overridden locations
+    env_loc = {
+        "GEMINI_OCR_PROJECT_ID": "p",
+        "GEMINI_OCR_LOCATION": "europe-west1",
+        "GEMINI_OCR_DOCUMENTAI_LOCATION": "eu",
+    }
+    with patch.dict(os.environ, env_loc, clear=True):
+        s = Settings.from_env()
+        assert s.get_documentai_location() == "eu"
+        assert s.location == "europe-west1"
 
 
 def test_settings_from_env_defaults() -> None:
@@ -43,7 +54,8 @@ def test_settings_from_env_defaults() -> None:
         # layout_processor_id and ocr_processor_id return None if missing in env
         s = Settings.from_env()
         assert s.project_id == "test-project"
-        assert s.location == "us"  # default
+        assert s.get_documentai_location() == "us"  # default
+        assert s.location == "us-central1"
 
         assert s.layout_processor_id is None
         assert s.ocr_processor_id is None

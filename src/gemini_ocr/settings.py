@@ -20,7 +20,7 @@ class Settings:
     """gemini-ocr settings."""
 
     location: str
-    """GCP location (e.g. 'us', 'eu')."""
+    """Gemini api endpoint location (e.g. 'us-central1')."""
     layout_processor_id: str | None
     """Document AI layout processor ID (required for Document AI mode)."""
     ocr_processor_id: str | None
@@ -35,6 +35,9 @@ class Settings:
 
     mode: OcrMode = OcrMode.GEMINI
     """Processing mode to use."""
+
+    documentai_location: str | None = None
+    """DocumentAI api endpoint location (e.g. 'us', 'eu'). If `None`, infers from `location`."""
 
     alignment_uniqueness_threshold: float = 0.5
     """Minimum score ratio between best and second-best match."""
@@ -55,6 +58,11 @@ class Settings:
     cache_docai: bool = True
     """Whether to cache DocAI API responses."""
 
+    def get_documentai_location(self) -> str:
+        if self.documentai_location is None:
+            return "eu" if self.location.startswith("eu") else "us"
+        return self.documentai_location
+
     @classmethod
     def from_env(cls, prefix: str = "GEMINI_OCR_") -> Self:
         """Create Settings from environment variables."""
@@ -71,12 +79,9 @@ class Settings:
 
         return cls(
             project_id=project_id,
-            location=getdefault("location", "us"),
+            location=getdefault("location", "us-central1"),
             quota_project_id=get("quota_project_id"),
             layout_processor_id=get("layout_processor_id"),
             ocr_processor_id=get("ocr_processor_id"),
             gemini_model_name=get("gemini_model_name"),
-            cache_dir=get("cache_dir"),
-            cache_gemini=getdefault("cache_gemini", "true").lower() == "true",
-            cache_docai=getdefault("cache_docai", "true").lower() == "true",
         )

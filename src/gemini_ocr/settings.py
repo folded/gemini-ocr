@@ -19,8 +19,6 @@ class OcrMode(enum.StrEnum):
 class Settings:
     """gemini-ocr settings."""
 
-    project_id: str
-    """GCP project ID."""
     location: str
     """GCP location (e.g. 'us', 'eu')."""
     layout_processor_id: str | None
@@ -28,6 +26,8 @@ class Settings:
     ocr_processor_id: str | None
     """Document AI OCR processor ID."""
 
+    project_id: str
+    """GCP project ID."""
     quota_project_id: str | None = None
     """GCP quota project ID (defaults to project if None)."""
     gemini_model_name: str | None = None
@@ -61,9 +61,9 @@ class Settings:
         def getdefault(key: str, default: str) -> str:
             return os.getenv(prefix + key.upper(), default)
 
-        project_id = get("project")
+        project_id = get("project_id")
         if project_id is None:
-            raise ValueError(f"{prefix}PROJECT environment variable is required.")
+            raise ValueError(f"{prefix}PROJECT_ID environment variable is required.")
 
         return cls(
             project_id=project_id,

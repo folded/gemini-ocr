@@ -9,7 +9,7 @@ from gemini_ocr.settings import Settings
 def test_settings_from_env() -> None:
     """Test loading from environment variable using from_env factory."""
     env = {
-        "GEMINI_OCR_PROJECT": "env-project",
+        "GEMINI_OCR_PROJECT_ID": "env-project",
         "GEMINI_OCR_LOCATION": "eu",
         "GEMINI_OCR_LAYOUT_PROCESSOR_ID": "env-layout",
         "GEMINI_OCR_OCR_PROCESSOR_ID": "env-ocr",
@@ -35,7 +35,7 @@ def test_settings_from_env_defaults() -> None:
     with patch.dict(
         os.environ,
         {
-            "GEMINI_OCR_PROJECT": "test-project",
+            "GEMINI_OCR_PROJECT_ID": "test-project",
             # LOCATION allows defaults/fallback
         },
         clear=True,
@@ -53,6 +53,6 @@ def test_settings_validation_error() -> None:
     """Test validation raises error if missing required env vars in from_env."""
     with (
         patch.dict(os.environ, {}, clear=True),
-        pytest.raises(ValueError, match="PROJECT environment variable is required"),
+        pytest.raises(ValueError, match="PROJECT_ID environment variable is required"),
     ):
         Settings.from_env()

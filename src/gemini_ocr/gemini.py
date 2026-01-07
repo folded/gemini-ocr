@@ -40,14 +40,14 @@ when rendered.**
   * Convert bar charts into markdown tables.
 * Convert tables contained in images into markdown.
 * Render all mathematical equations and symbols using LaTeX formatting.
-  * e.g. use `\alpha` instead of `α`, `\cos` instead of `cos`.
+  * e.g. use `\alpha` instead of `α`, `\\cos` instead of `cos`.
   * Enclose equations in `$` or `$$`.
   * Pay close attention to distinguishing Latin and Greek characters, e.g. 'a' vs '\alpha'.
 * Insert markers at the start of each page of the form `<!--page-->`
 * Surround tables and figure descriptions with markers:
   * `<!--table-->` ... `<!--end-->`
   * `<!--figure-->` ... `<!--end-->`
-"""
+"""  # noqa: RUF001
 
 
 async def generate_markdown(

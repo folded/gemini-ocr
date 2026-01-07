@@ -313,7 +313,7 @@ def _process_alignment_iteration(
     candidates = list(
         _assign_high_confidence_spans(
             spans,
-            sorted(list(bbox_spans), key=lambda x: (x.bbox.page, x.bbox.rect.top, x.bbox.rect.left, x.bbox.text)),
+            sorted(bbox_spans, key=lambda x: (x.bbox.page, x.bbox.rect.top, x.bbox.rect.left, x.bbox.text)),
             uniqueness_threshold=uniqueness_threshold,
             min_overlap=min_overlap,
             with_ungapped=iteration_num == 1,

@@ -1,9 +1,14 @@
 import json
-import pickle
+import os
 import pathlib
-from unittest.mock import MagicMock, patch, AsyncMock
+import pickle
+import typing
+from unittest.mock import AsyncMock, patch
+
 import pytest
-from gemini_ocr import gemini_ocr, settings, document
+from google.cloud import documentai  # type: ignore[import-untyped]
+
+from gemini_ocr import document, gemini_ocr, settings
 
 FIXTURES_DIR = pathlib.Path(__file__).parent / "fixtures"
 
@@ -21,25 +26,29 @@ def regression_settings() -> settings.Settings:
 
 
 @pytest.mark.asyncio
-async def test_hubble_regression(regression_settings, tmp_path) -> None:
+async def test_hubble_regression(regression_settings: settings.Settings) -> None:
     pdf_path = pathlib.Path("tests/data/hubble-1929.pdf")
     if not pdf_path.exists():
         pytest.skip("Regression test PDF not found")
 
     # Load fixtures
+    # Load fixtures
     with open(FIXTURES_DIR / "hubble_gemini_responses.json") as f:
         gemini_responses = json.load(f)
 
-    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f:
-        docai_bboxes = pickle.load(f)
+    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f_bin:
+        docai_bboxes = pickle.load(f_bin)  # noqa: S301
 
-    async def mock_gemini_side_effect(settings, chunk):
+    async def mock_gemini_side_effect(_settings: settings.Settings, chunk: document.DocumentChunk) -> str:
         idx = chunk.start_page // 10
-        return gemini_responses[idx]
+        return str(gemini_responses[idx])
 
-    async def mock_ocr_side_effect(settings, chunk):
+    async def mock_ocr_side_effect(
+        _settings: settings.Settings,
+        chunk: document.DocumentChunk,
+    ) -> list[document.BoundingBox]:
         idx = chunk.start_page // 10
-        return docai_bboxes[idx]
+        return typing.cast("list[document.BoundingBox]", docai_bboxes[idx])
 
     # Patch
     with patch("gemini_ocr.gemini.generate_markdown", new_callable=AsyncMock) as mock_gemini:
@@ -57,8 +66,6 @@ async def test_hubble_regression(regression_settings, tmp_path) -> None:
             # Compare with golden
             golden_path = FIXTURES_DIR / "hubble_golden.md"
 
-            import os
-
             if os.environ.get("UPDATE_GOLDEN"):
                 golden_path.write_text(output_md)
 
@@ -70,7 +77,7 @@ async def test_hubble_regression(regression_settings, tmp_path) -> None:
 
 
 @pytest.mark.asyncio
-async def test_hubble_docai_regression(regression_settings, tmp_path) -> None:
+async def test_hubble_docai_regression(regression_settings: settings.Settings) -> None:
     pdf_path = pathlib.Path("tests/data/hubble-1929.pdf")
     if not pdf_path.exists():
         pytest.skip("Regression test PDF not found")
@@ -84,21 +91,28 @@ async def test_hubble_docai_regression(regression_settings, tmp_path) -> None:
         docai_responses_json = json.load(f)
 
     # Deserialize list of JSON strings to documentai.Document objects
-    # We need to import documentai inside or top level
-    from google.cloud import documentai
+    docai_responses = [
+        typing.cast("documentai.Document", documentai.Document.from_json(j)) for j in docai_responses_json
+    ]
 
-    docai_responses = [documentai.Document.from_json(j) for j in docai_responses_json]
+    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f_bin:
+        docai_bboxes = pickle.load(f_bin)  # noqa: S301
 
-    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f:
-        docai_bboxes = pickle.load(f)
-
-    async def mock_docai_side_effect(settings, process_options, processor_id, chunk):
+    async def mock_docai_side_effect(
+        _settings: settings.Settings,
+        _process_options: documentai.ProcessOptions,
+        _processor_id: str,
+        chunk: document.DocumentChunk,
+    ) -> documentai.Document:
         idx = chunk.start_page // 10
         return docai_responses[idx]
 
-    async def mock_ocr_side_effect(settings, chunk):
+    async def mock_ocr_side_effect(
+        _settings: settings.Settings,
+        chunk: document.DocumentChunk,
+    ) -> list[document.BoundingBox]:
         idx = chunk.start_page // 10
-        return docai_bboxes[idx]
+        return typing.cast("list[document.BoundingBox]", docai_bboxes[idx])
 
     # Patch
     with patch("gemini_ocr.docai.process", new_callable=AsyncMock) as mock_process:
@@ -115,8 +129,6 @@ async def test_hubble_docai_regression(regression_settings, tmp_path) -> None:
 
             # Compare with golden
             golden_path = FIXTURES_DIR / "hubble_docai_golden.md"
-
-            import os
 
             if os.environ.get("UPDATE_GOLDEN"):
                 golden_path.write_text(output_md)

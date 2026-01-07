@@ -1,26 +1,32 @@
 import asyncio
-import itertools
 import json
-import numpy as np
 import os
 import pickle
-import dotenv
-from pathlib import Path
 
 # Add src to path so we can import gemini_ocr modules
 import sys
+from pathlib import Path
+
+import dotenv
 
 sys.path.append(str(Path.cwd() / "src"))
 
-from gemini_ocr import settings, document, docai_ocr, gemini_ocr, gemini
+import typing
+
+from gemini_ocr import docai_ocr, document, gemini, settings
 
 # For serializing BBox
-from gemini_ocr.document import BoundingBox, BBox
 
 
-async def capture():
+async def capture() -> None:
     # Load .env
     dotenv.load_dotenv()
+
+    # ... (skipping some unchanged lines in between) ...
+
+    # Re-running DocAI OCR (bboxes) is safer.
+    # Note: process_document uses batched gather.
+    # We'll reproduce logic from extract_raw_data roughly but per chunk.
 
     # Map GOOGLE_OCR_ vars to GEMINI_OCR_ vars if needed
     mapping = {
@@ -30,8 +36,9 @@ async def capture():
         "GOOGLE_OCR_LOCATION": "GEMINI_OCR_LOCATION",
     }
     for src, dst in mapping.items():
-        if os.getenv(src) and not os.getenv(dst):
-            os.environ[dst] = os.getenv(src)
+        val = os.getenv(src)
+        if val and not os.getenv(dst):
+            os.environ[dst] = val
 
     pdf_path = Path("tests/data/hubble-1929.pdf")
 
@@ -55,44 +62,9 @@ async def capture():
         json.dump(gemini_responses, f)
     print("Saved Gemini responses.")
 
-    # 2. Capture DocAI OCR Bounding Boxes (if not already cached/saved)
-    # We can probably skipping re-capturing DocAI bboxes if the file hasn't changed,
-    # but to be safe and complete, let's re-capture or verify.
-    # The existing fixture is hubble_docai_bboxes.pkl.
-    # The user asked only to improve Gemini prompt.
-    # But for a consistent set, good to refresh. However, DocAI costs money/quota.
-    # I'll check if the file exists and skip if so?
-    # Actually, the user's request doesn't affect DocAI output.
-    # But I deleted the original generation script.
-
-    # Let's re-generate DocAI bboxes just in case, or load existing if I wanted to rely on them.
-    # Since I claimed I am establishing a regression test, I should own the fixtures.
-    # Re-running DocAI OCR (bboxes) is safer.
-
-    docai_bboxes_list = []
-    # Note: process_document uses batched gather.
-    # We'll reproduce logic from extract_raw_data roughly but per chunk.
-
     print("Generating DocAI BBoxes...")
-    # Parallelize?
-    # docai_ocr.generate_bounding_boxes
 
-    # docai_ocr.generate_bounding_boxes returns list[BoundingBox]
-
-    # We'll just execute it.
-    all_chunks_bboxes = []
-
-    # To match the regression structure (list of lists of bboxes corresponding to chunks is NOT what the current regression test does!)
-    # Wait, the regression test logic I wrote earlier:
-    # "mock_ocr.side_effect = mock_ocr_side_effect"
-    # "return docai_bboxes[idx]"
-    # So docai_bboxes in pickle should be a LIST OF LISTS of BoundingBoxes, one per chunk.
-
-    # Let's verify what I loaded in the test.
-    # "docai_bboxes = pickle.load(f)"
-    # "return docai_bboxes[idx]" -> So it is indexed by chunk index.
-
-    # Okay, so I need to save a List[List[BoundingBox]].
+    all_chunks_bboxes: list[typing.Any] = []
 
     for i, chunk in enumerate(chunks):
         print(f"Generating DocAI bboxes for chunk {i}...")

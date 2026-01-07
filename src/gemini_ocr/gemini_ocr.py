@@ -132,7 +132,7 @@ async def extract_raw_data(
         markdown_chunks = await _batched_gather(markdown_work, settings.num_jobs)
 
         # Renumber tables and figures
-        counters = collections.Counter()
+        counters: collections.Counter[str] = collections.Counter()
 
         def _renumber(match: re.Match) -> str:
             kind = match.group(1)

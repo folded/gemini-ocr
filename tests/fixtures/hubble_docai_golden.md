@@ -272,4 +272,3 @@ a restricted range in distance<span class="ocr_bbox" data-bbox="753,142,764,712"
 - <span class="ocr_bbox" data-bbox="767,155,777,436" data-page="5">Harvard Coll. Obs. Circ., 294, 1926</span>.
 - <span class="ocr_bbox" data-bbox="781,156,791,516" data-page="5">Mon. Not. R. Astr. Soc., 85, 1925 (865-894<span class="ocr_bbox" data-bbox="794,143,804,451" data-page="5"></span>).
 - These PROCEEDINGS, 15, 1929 (167</span>).
-

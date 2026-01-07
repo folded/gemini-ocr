@@ -1,13 +1,15 @@
 import asyncio
 import json
 import os
-import dotenv
 from pathlib import Path
+
+import dotenv
 from google.cloud import documentai
-from gemini_ocr import settings, document, docai
+
+from gemini_ocr import docai, document, settings
 
 
-async def capture():
+async def capture() -> None:
     # Load .env
     dotenv.load_dotenv()
 

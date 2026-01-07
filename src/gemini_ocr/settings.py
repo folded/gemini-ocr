@@ -49,7 +49,11 @@ class Settings:
     num_jobs: int = 10
     """Max concurrent jobs."""
     cache_dir: str | None = None
-    """Directory to store API response cache."""
+    """Directory to store API response cache. `None` disables caching."""
+    cache_gemini: bool = True
+    """Whether to cache Gemini API responses."""
+    cache_docai: bool = True
+    """Whether to cache DocAI API responses."""
 
     @classmethod
     def from_env(cls, prefix: str = "GEMINI_OCR_") -> Self:
@@ -72,4 +76,7 @@ class Settings:
             layout_processor_id=get("layout_processor_id"),
             ocr_processor_id=get("ocr_processor_id"),
             gemini_model_name=get("gemini_model_name"),
+            cache_dir=get("cache_dir"),
+            cache_gemini=getdefault("cache_gemini", "true").lower() == "true",
+            cache_docai=getdefault("cache_docai", "true").lower() == "true",
         )

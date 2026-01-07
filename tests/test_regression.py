@@ -67,3 +67,62 @@ async def test_hubble_regression(regression_settings, tmp_path) -> None:
 
             expected = golden_path.read_text()
             assert output_md == expected
+
+
+@pytest.mark.asyncio
+async def test_hubble_docai_regression(regression_settings, tmp_path) -> None:
+    pdf_path = pathlib.Path("tests/data/hubble-1929.pdf")
+    if not pdf_path.exists():
+        pytest.skip("Regression test PDF not found")
+
+    docai_settings = regression_settings
+    docai_settings.mode = settings.OcrMode.DOCUMENTAI
+    docai_settings.layout_processor_id = "test-layout-id"  # Mocked anyway
+
+    # Load fixtures
+    with open(FIXTURES_DIR / "hubble_docai_layout_responses.json") as f:
+        docai_responses_json = json.load(f)
+
+    # Deserialize list of JSON strings to documentai.Document objects
+    # We need to import documentai inside or top level
+    from google.cloud import documentai
+
+    docai_responses = [documentai.Document.from_json(j) for j in docai_responses_json]
+
+    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f:
+        docai_bboxes = pickle.load(f)
+
+    async def mock_docai_side_effect(settings, process_options, processor_id, chunk):
+        idx = chunk.start_page // 10
+        return docai_responses[idx]
+
+    async def mock_ocr_side_effect(settings, chunk):
+        idx = chunk.start_page // 10
+        return docai_bboxes[idx]
+
+    # Patch
+    with patch("gemini_ocr.docai.process", new_callable=AsyncMock) as mock_process:
+        mock_process.side_effect = mock_docai_side_effect
+
+        with patch("gemini_ocr.docai_ocr.generate_bounding_boxes", new_callable=AsyncMock) as mock_ocr:
+            mock_ocr.side_effect = mock_ocr_side_effect
+
+            # Run
+            result = await gemini_ocr.process_document(pdf_path, settings=docai_settings)
+
+            # Annotate
+            output_md = result.annotate()
+
+            # Compare with golden
+            golden_path = FIXTURES_DIR / "hubble_docai_golden.md"
+
+            import os
+
+            if os.environ.get("UPDATE_GOLDEN"):
+                golden_path.write_text(output_md)
+
+            if not golden_path.exists():
+                pytest.fail("Golden file not found. Run with UPDATE_GOLDEN=1 to generate it.")
+
+            expected = golden_path.read_text()
+            assert output_md == expected

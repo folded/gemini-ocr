@@ -1,6 +1,6 @@
 # Gemini OCR
 
-<img src="https://raw.githubusercontent.com/folded/gemini-ocr/main/docs/source/_static/gemini-ocr.svg" alt="gemini-ocr">
+<img src="https://raw.githubusercontent.com/folded/gemini-ocr/main/docs/source/_static/gemini-ocr.svg" alt="gemini-ocr" width="200">
 
 ## Traceable Generative Markdown for PDFs
 

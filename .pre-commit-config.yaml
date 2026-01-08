@@ -7,6 +7,7 @@ repos:
       - id: check-yaml
         exclude: '\.*conda/.*'
       - id: end-of-file-fixer
+        exclude: 'tests/fixtures'
       - id: trailing-whitespace
         exclude: '\.txt$|\.tsv$'
       - id: check-case-conflict
@@ -19,6 +20,7 @@ repos:
     rev: v0.45.0
     hooks:
       - id: markdownlint
+        exclude: 'tests/fixtures'
 
   - repo: https://github.com/populationgenomics/pre-commits
     rev: "e37928f761f17d54aca5cedf93848b40ec7cff26"

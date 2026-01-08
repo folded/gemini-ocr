@@ -106,8 +106,15 @@ def chunks(
     file_bytes, mime_type = _resolve_input(input_source, mime_type)
 
     # Auto-detect PDF if mime_type is unknown
-    if mime_type is None and file_bytes.startswith(b"%PDF"):
-        mime_type = "application/pdf"
+    if mime_type is None:
+        if file_bytes.startswith(b"%PDF"):
+            mime_type = "application/pdf"
+        elif file_bytes.startswith(b"\x89PNG\r\n\x1a\n"):
+            mime_type = "image/png"
+        elif file_bytes.startswith(b"\xff\xd8"):
+            mime_type = "image/jpeg"
+        elif file_bytes.startswith(b"RIFF") and file_bytes[8:12] == b"WEBP":
+            mime_type = "image/webp"
 
     if mime_type and mime_type.startswith("image/"):
         yield DocumentChunk(hashlib.sha256(file_bytes).hexdigest(), 0, 0, file_bytes, mime_type)

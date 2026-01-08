@@ -111,6 +111,7 @@ async def extract_raw_data(
     document_input: document.DocumentInput,
     settings: settings_module.Settings | None = None,
     markdown_content: str | None = None,
+    mime_type: str | None = None,
 ) -> RawOcrData:
     """
     Extracts raw OCR data (markdown and bounding boxes) from a file.
@@ -119,6 +120,7 @@ async def extract_raw_data(
         document_input: The document to process (Path, str, bytes, or stream).
         settings: Configuration settings.
         markdown_content: Optional existing markdown content.
+        mime_type: Optional MIME type of the document.
 
     Returns:
         RawOcrData containing markdown and bounding boxes.
@@ -126,7 +128,7 @@ async def extract_raw_data(
     if settings is None:
         settings = settings_module.Settings.from_env()
 
-    chunks = list(document.chunks(document_input, page_count=settings.markdown_page_batch_size))
+    chunks = list(document.chunks(document_input, page_count=settings.markdown_page_batch_size, mime_type=mime_type))
     if not markdown_content:
         markdown_work = [_generate_markdown_for_chunk(settings, chunk) for chunk in chunks]
         markdown_chunks = await _batched_gather(markdown_work, settings.num_jobs)
@@ -155,6 +157,7 @@ async def process_document(
     document_input: document.DocumentInput,
     settings: settings_module.Settings | None = None,
     markdown_content: str | None = None,
+    mime_type: str | None = None,
 ) -> OcrResult:
     """
     Processes a document to generate annotated markdown with OCR bounding boxes.
@@ -163,6 +166,7 @@ async def process_document(
         document_input: The document to process (Path, str, bytes, or stream).
         settings: Configuration settings.
         markdown_content: Optional existing markdown content.
+        mime_type: Optional MIME type of the document (useful for bytes/stream input).
 
     Returns:
         OcrResult containing annotated markdown and stats.
@@ -170,7 +174,7 @@ async def process_document(
     if settings is None:
         settings = settings_module.Settings.from_env()
 
-    raw_data = await extract_raw_data(document_input, settings, markdown_content)
+    raw_data = await extract_raw_data(document_input, settings, markdown_content, mime_type=mime_type)
     annotated_markdown = bbox_alignment.create_annotated_markdown(
         raw_data.markdown_content,
         raw_data.bounding_boxes,

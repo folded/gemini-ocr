@@ -75,6 +75,12 @@ async def main() -> None:
     )
 
     parser.add_argument(
+        "--gemini-prompt",
+        default=None,
+        help="Additional instructions to append to the default Gemini prompt.",
+    )
+
+    parser.add_argument(
         "--output",
         type=pathlib.Path,
         default=pathlib.Path("output.md"),
@@ -128,6 +134,7 @@ async def main() -> None:
         layout_processor_id=args.processor_id,
         ocr_processor_id=args.ocr_processor_id,
         gemini_model_name=args.model,
+        gemini_prompt=args.gemini_prompt,
         mode=args.mode,
         include_bboxes=not args.no_bbox,
         cache_dir=args.cache_dir,

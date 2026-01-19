@@ -52,8 +52,6 @@ when rendered.**
   * `<!--figure-->` ... `<!--end-->`
 """  # noqa: RUF001
 
-_GEMINI_PROMPT_SHA256: Final[bytes] = hashlib.sha256(GEMINI_PROMPT.encode()).digest()
-
 
 def _call_gemini(settings: settings.Settings, chunk: document.DocumentChunk) -> genai.types.GenerateContentResponse:
     # TODO: consider reusing client
@@ -78,6 +76,8 @@ def _call_gemini(settings: settings.Settings, chunk: document.DocumentChunk) -> 
     contents: list[genai.types.Part | str] = []
     contents.append(genai.types.Part(inline_data=genai.types.Blob(data=chunk.data, mime_type=chunk.mime_type)))
     contents.append(GEMINI_PROMPT)
+    if settings.gemini_prompt:
+        contents.append(settings.gemini_prompt)
 
     return client.models.generate_content(
         model=model_name,
@@ -90,7 +90,9 @@ def _generate_cache_path(settings: settings.Settings, chunk: document.DocumentCh
     if not settings.cache_dir or not settings.cache_gemini:
         return None
     hasher = hashlib.sha256()
-    hasher.update(_GEMINI_PROMPT_SHA256)
+    hasher.update(GEMINI_PROMPT.encode())
+    if settings.gemini_prompt:
+        hasher.update(settings.gemini_prompt.encode())
     hasher.update(chunk.document_sha256.encode())
     hasher.update((settings.gemini_model_name or "").encode())
     cache_key = f"{hasher.hexdigest()}_{chunk.start_page}_{chunk.end_page}"

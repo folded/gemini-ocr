@@ -32,6 +32,8 @@ class Settings:
     """GCP quota project ID (defaults to project if None)."""
     gemini_model_name: str | None = None
     """Name of the Gemini model to use. (required for Gemini mode)"""
+    gemini_prompt: str | None = None
+    """Additional instructions to append to the default Gemini prompt."""
 
     mode: OcrMode = OcrMode.GEMINI
     """Processing mode to use."""

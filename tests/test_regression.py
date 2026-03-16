@@ -45,7 +45,9 @@ async def test_hubble_regression() -> None:
         return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
     markdown_provider = gemini_module.GeminiMarkdownProvider(
-        project_id=PROJECT, location=LOCATION, model_name="gemini-2.0-flash",
+        project_id=PROJECT,
+        location=LOCATION,
+        model_name="gemini-2.0-flash",
     )
     anchor_provider = docai_ocr.DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 
@@ -107,7 +109,9 @@ async def test_hubble_docai_regression() -> None:
         return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
     markdown_provider = docai_layout.DocAIMarkdownProvider(
-        project_id=PROJECT, location=LOCATION, processor_id="test-layout-id",
+        project_id=PROJECT,
+        location=LOCATION,
+        processor_id="test-layout-id",
     )
     anchor_provider = docai_ocr.DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 

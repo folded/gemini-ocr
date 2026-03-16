@@ -1,8 +1,11 @@
-from gemini_ocr import document, settings
+import dataclasses
+
+import anchorite
 
 
-async def generate_markdown(
-    settings: settings.Settings,
-    chunk: document.DocumentChunk,
-) -> str:
-    raise NotImplementedError
+@dataclasses.dataclass
+class DoclingMarkdownProvider(anchorite.providers.MarkdownProvider):
+    """Markdown provider that generates markdown using Docling."""
+
+    async def generate_markdown(self, chunk: anchorite.document.DocumentChunk) -> str:
+        raise NotImplementedError

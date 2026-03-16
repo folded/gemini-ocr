@@ -1,10 +1,9 @@
 import pathlib
 from unittest.mock import MagicMock, patch
 
+import anchorite
 import fitz
 import pytest
-
-from gemini_ocr import document
 
 
 @pytest.fixture
@@ -28,7 +27,7 @@ def test_chunks_gcs_path(valid_pdf_bytes: bytes) -> None:
         mock_open.return_value = mock_file
 
         # Call chunks
-        chunks = list(document.chunks(gcs_path))
+        chunks = list(anchorite.document.chunks(gcs_path))
 
         # Verify fsspec.open called
         mock_open.assert_called_once_with(gcs_path, "rb")
@@ -45,6 +44,6 @@ def test_chunks_local_file(tmp_path: pathlib.Path, valid_pdf_bytes: bytes) -> No
     pdf_path = tmp_path / "test.pdf"
     pdf_path.write_bytes(valid_pdf_bytes)
 
-    chunks = list(document.chunks(pdf_path))
+    chunks = list(anchorite.document.chunks(pdf_path))
     assert len(chunks) > 0
     assert chunks[0].data == valid_pdf_bytes

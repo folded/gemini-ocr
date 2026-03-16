@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gemini-ocr"
-version = "0.4.0"
+version = "0.5.0"
 authors = [
     { name = "Tobias Sargeant", email = "tobias.sargeant@gmail.com" },
 ]
@@ -24,11 +24,12 @@ dependencies = [
     "google-genai",
     "google-cloud-documentai",
     "pymupdf",
-    "seq-smith>=0.5.1",
     "python-dotenv>=1.2.1",
     "fsspec",
     "gcsfs",
+    "anchorite==0.2.0",
 ]
+
 
 [dependency-groups]
 dev = [
@@ -50,6 +51,7 @@ indent-width = 4
 select = ["A", "B", "C",  "E", "F", "G", "I", "N", "Q", "S", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
 ignore = [
     "ANN101",  # missing-type-self
+    "COM812",  # conflicts with ruff format
     "PD011",   # pandas-use-of-dot-values (false positive)
 ]
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]

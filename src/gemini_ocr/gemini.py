@@ -1,13 +1,13 @@
 import asyncio
+import dataclasses
 import hashlib
 import logging
 import pathlib
 from typing import Final
 
+import anchorite
 import google.auth
 from google import genai
-
-from gemini_ocr import document, settings
 
 GEMINI_PROMPT: Final[str] = """
 Carefully transcribe the text for this pdf into a text file with
@@ -52,66 +52,71 @@ when rendered.**
   * `<!--figure-->` ... `<!--end-->`
 """  # noqa: RUF001
 
-_GEMINI_PROMPT_SHA256: Final[bytes] = hashlib.sha256(GEMINI_PROMPT.encode()).digest()
 
+@dataclasses.dataclass
+class GeminiMarkdownProvider(anchorite.providers.MarkdownProvider):
+    """Markdown provider that generates markdown using the Gemini API."""
 
-def _call_gemini(settings: settings.Settings, chunk: document.DocumentChunk) -> genai.types.GenerateContentResponse:
-    # TODO: consider reusing client
-    credentials, _ = google.auth.default()
-    if settings.quota_project_id:
-        credentials = credentials.with_quota_project(settings.quota_project_id)
-    elif settings.project_id:
-        # Fallback to project if quota_project_id is not set
-        credentials = credentials.with_quota_project(settings.project_id)
+    project_id: str
+    location: str
+    model_name: str
+    quota_project_id: str | None = None
+    prompt: str | None = None
+    cache_dir: str | None = None
+    cache: bool = True
 
-    client = genai.Client(
-        vertexai=True,
-        project=settings.project_id,
-        location=settings.location,
-        credentials=credentials,
-    )
+    def _cache_path(self, chunk: anchorite.document.DocumentChunk) -> pathlib.Path | None:
+        if not self.cache_dir or not self.cache:
+            return None
+        hasher = hashlib.sha256()
+        hasher.update(GEMINI_PROMPT.encode())
+        if self.prompt:
+            hasher.update(self.prompt.encode())
+        hasher.update(chunk.document_sha256.encode())
+        hasher.update((self.model_name or "").encode())
+        cache_key = f"{hasher.hexdigest()}_{chunk.start_page}_{chunk.end_page}"
+        return pathlib.Path(self.cache_dir) / "gemini" / f"{cache_key}.txt"
 
-    model_name = settings.gemini_model_name
-    if model_name is None:
-        raise ValueError("gemini_model_name is required for Gemini mode.")
+    def _call(self, chunk: anchorite.document.DocumentChunk) -> genai.types.GenerateContentResponse:
+        credentials, _ = google.auth.default()
+        if self.quota_project_id:
+            credentials = credentials.with_quota_project(self.quota_project_id)
+        elif self.project_id:
+            credentials = credentials.with_quota_project(self.project_id)
 
-    contents: list[genai.types.Part | str] = []
-    contents.append(genai.types.Part(inline_data=genai.types.Blob(data=chunk.data, mime_type=chunk.mime_type)))
-    contents.append(GEMINI_PROMPT)
+        client = genai.Client(
+            vertexai=True,
+            project=self.project_id,
+            location=self.location,
+            credentials=credentials,
+        )
 
-    return client.models.generate_content(
-        model=model_name,
-        contents=contents,
-        config=genai.types.GenerateContentConfig(response_mime_type="text/plain"),
-    )
+        contents: list[genai.types.Part | str] = [
+            genai.types.Part(inline_data=genai.types.Blob(data=chunk.data, mime_type=chunk.mime_type)),
+            GEMINI_PROMPT,
+        ]
+        if self.prompt:
+            contents.append(self.prompt)
 
+        return client.models.generate_content(
+            model=self.model_name,
+            contents=contents,
+            config=genai.types.GenerateContentConfig(response_mime_type="text/plain"),
+        )
 
-def _generate_cache_path(settings: settings.Settings, chunk: document.DocumentChunk) -> pathlib.Path | None:
-    if not settings.cache_dir or not settings.cache_gemini:
-        return None
-    hasher = hashlib.sha256()
-    hasher.update(_GEMINI_PROMPT_SHA256)
-    hasher.update(chunk.document_sha256.encode())
-    hasher.update((settings.gemini_model_name or "").encode())
-    cache_key = f"{hasher.hexdigest()}_{chunk.start_page}_{chunk.end_page}"
-    return pathlib.Path(settings.cache_dir) / "gemini" / f"{cache_key}.txt"
+    async def generate_markdown(self, chunk: anchorite.document.DocumentChunk) -> str:
+        cache_path = self._cache_path(chunk)
 
+        if cache_path and cache_path.exists():
+            logging.debug("Loaded from Gemini cache: %s", cache_path)
+            return cache_path.read_text()
 
-async def generate_markdown(settings: settings.Settings, chunk: document.DocumentChunk) -> str | None:
-    """Generates markdown for a chunk using the Gemini API."""
+        response = await asyncio.to_thread(self._call, chunk)
+        text = response.text or ""
 
-    cache_path = _generate_cache_path(settings, chunk)
+        if cache_path and text:
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            cache_path.write_text(text)
+            logging.debug("Saved to Gemini cache: %s", cache_path)
 
-    if cache_path and cache_path.exists():
-        logging.debug("Loaded from Gemini cache: %s", cache_path)
-        return cache_path.read_text()
-
-    response = await asyncio.to_thread(_call_gemini, settings, chunk)
-    text = response.text
-
-    if cache_path and text:
-        cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(text)
-        logging.debug("Saved to Gemini cache: %s", cache_path)
-
-    return text
+        return text

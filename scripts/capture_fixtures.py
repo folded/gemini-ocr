@@ -1,34 +1,23 @@
+"""Capture Gemini markdown and DocAI bounding-box fixtures for regression tests."""
+
 import asyncio
 import json
 import os
-import pickle
-
-# Add src to path so we can import gemini_ocr modules
 import sys
 from pathlib import Path
 
+import anchorite
 import dotenv
 
-sys.path.append(str(Path.cwd() / "src"))
+sys.path.insert(0, str(Path.cwd() / "src"))
 
-import typing
-
-from gemini_ocr import docai_ocr, document, gemini, settings
-
-# For serializing BBox
+from gemini_ocr import DocAIAnchorProvider, GeminiMarkdownProvider
 
 
 async def capture() -> None:
-    # Load .env
     dotenv.load_dotenv()
 
-    # ... (skipping some unchanged lines in between) ...
-
-    # Re-running DocAI OCR (bboxes) is safer.
-    # Note: process_document uses batched gather.
-    # We'll reproduce logic from extract_raw_data roughly but per chunk.
-
-    # Map GOOGLE_OCR_ vars to GEMINI_OCR_ vars if needed
+    # Support legacy env-var names used in CI/local setups
     mapping = {
         "GOOGLE_OCR_PROJECT": "GEMINI_OCR_PROJECT_ID",
         "GOOGLE_OCR_LAYOUT_PARSER_PROCESSOR_ID": "GEMINI_OCR_LAYOUT_PROCESSOR_ID",
@@ -40,40 +29,50 @@ async def capture() -> None:
         if val and not os.getenv(dst):
             os.environ[dst] = val
 
+    project_id = os.environ["GEMINI_OCR_PROJECT_ID"]
+    location = os.getenv("GEMINI_OCR_LOCATION", "us-central1")
+    model_name = os.environ["GEMINI_OCR_GEMINI_MODEL_NAME"]
+    ocr_processor_id = os.environ["GEMINI_OCR_OCR_PROCESSOR_ID"]
+    cache_dir = os.getenv("GEMINI_OCR_CACHE_DIR")
+
+    markdown_provider = GeminiMarkdownProvider(
+        project_id=project_id,
+        location=location,
+        model_name=model_name,
+        cache_dir=cache_dir,
+    )
+    anchor_provider = DocAIAnchorProvider(
+        project_id=project_id,
+        location=location,
+        processor_id=ocr_processor_id,
+        cache_dir=cache_dir,
+    )
+
     pdf_path = Path("tests/data/hubble-1929.pdf")
+    chunks = list(anchorite.document.chunks(pdf_path))
 
-    ocr_settings = settings.Settings.from_env()
-    # Ensure Gemini mode
-    ocr_settings.mode = settings.OcrMode.GEMINI
+    print(f"Processing {pdf_path} ({len(chunks)} chunks)...")
 
-    print(f"Processing {pdf_path}...")
-    print(f"Settings: {ocr_settings}")
-
-    chunks = list(document.chunks(pdf_path, page_count=ocr_settings.markdown_page_batch_size))
-
-    # 1. Capture Gemini Markdown Responses
     gemini_responses = []
     for i, chunk in enumerate(chunks):
         print(f"Generating Gemini markdown for chunk {i}...")
-        text = await gemini.generate_markdown(ocr_settings, chunk)
+        text = await markdown_provider.generate_markdown(chunk)
         gemini_responses.append(text)
 
     with open("tests/fixtures/hubble_gemini_responses.json", "w") as f:
         json.dump(gemini_responses, f)
     print("Saved Gemini responses.")
 
-    print("Generating DocAI BBoxes...")
-
-    all_chunks_bboxes: list[typing.Any] = []
-
+    all_chunks_bboxes = []
     for i, chunk in enumerate(chunks):
         print(f"Generating DocAI bboxes for chunk {i}...")
-        bboxes = await docai_ocr.generate_bounding_boxes(ocr_settings, chunk)
-        all_chunks_bboxes.append(bboxes)
+        anchors = await anchor_provider.generate_anchors(chunk)
+        all_chunks_bboxes.append(
+            [{"text": a.text, "page": a.page, "boxes": [b._asdict() for b in a.boxes]} for a in anchors],
+        )
 
-    with open("tests/fixtures/hubble_docai_bboxes.pkl", "wb") as f:
-        pickle.dump(all_chunks_bboxes, f)
-
+    with open("tests/fixtures/hubble_docai_bboxes.json", "w") as f:
+        json.dump(all_chunks_bboxes, f)
     print("Saved DocAI bboxes.")
 
 

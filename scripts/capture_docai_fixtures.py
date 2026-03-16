@@ -1,16 +1,21 @@
+"""Capture Document AI layout fixtures for regression tests."""
+
 import asyncio
 import json
 import os
+import sys
 from pathlib import Path
 
+import anchorite
 import dotenv
 from google.cloud import documentai
 
-from gemini_ocr import docai, document, settings
+sys.path.insert(0, str(Path.cwd() / "src"))
+
+from gemini_ocr import docai
 
 
 async def capture() -> None:
-    # Load .env
     dotenv.load_dotenv()
 
     mapping = {
@@ -20,47 +25,43 @@ async def capture() -> None:
         "GOOGLE_OCR_LOCATION": "GEMINI_OCR_LOCATION",
     }
     for src, dst in mapping.items():
-        if os.getenv(src) and not os.getenv(dst):
-            os.environ[dst] = os.getenv(src)
+        val = os.getenv(src)
+        if val and not os.getenv(dst):
+            os.environ[dst] = val
+
+    project_id = os.environ["GEMINI_OCR_PROJECT_ID"]
+    location = os.getenv("GEMINI_OCR_LOCATION", "us-central1")
+    layout_processor_id = os.environ["GEMINI_OCR_LAYOUT_PROCESSOR_ID"]
+    documentai_location = os.getenv("GEMINI_OCR_DOCUMENTAI_LOCATION")
+    cache_dir = os.getenv("GEMINI_OCR_CACHE_DIR")
+
+    process_options = documentai.ProcessOptions(
+        layout_config=documentai.ProcessOptions.LayoutConfig(
+            return_bounding_boxes=True,
+        ),
+    )
 
     pdf_path = Path("tests/data/hubble-1929.pdf")
+    chunks = list(anchorite.document.chunks(pdf_path))
 
-    ocr_settings = settings.Settings.from_env()
-    ocr_settings.mode = settings.OcrMode.DOCUMENTAI
-
-    print(f"Processing with settings: {ocr_settings}")
-
-    chunks = list(document.chunks(pdf_path, page_count=ocr_settings.markdown_page_batch_size))
+    print(f"Processing {pdf_path} ({len(chunks)} chunks) with Document AI Layout...")
 
     documents = []
     for i, chunk in enumerate(chunks):
         print(f"Calling DocAI Layout for chunk {i}...")
-
-        # docai.process returns documentai.Document
-        # We need the processor ID.
-        if ocr_settings.layout_processor_id is None:
-            raise ValueError("Layout processor ID required")
-
-        process_options = documentai.ProcessOptions(
-            layout_config=documentai.ProcessOptions.LayoutConfig(
-                return_bounding_boxes=True,
-            ),
+        doc = await docai.process(
+            project_id,
+            location,
+            layout_processor_id,
+            process_options,
+            chunk,
+            documentai_location=documentai_location,
+            cache_dir=cache_dir,
         )
+        documents.append(type(doc).to_json(doc))
 
-        doc = await docai.process(ocr_settings, process_options, ocr_settings.layout_processor_id, chunk)
-
-        # Serialize to JSON using protojson (built-in to the class usually or via library)
-        # documentai.Document is a proto-plus wrapper. verify .to_json() or similar.
-        # Actually Google Proto objects usually have ._pb methods or we can use type(doc).to_json(doc)
-
-        # Let's try standard serialization
-        json_str = type(doc).to_json(doc)
-        documents.append(json_str)
-
-    # Save list of JSON strings
     with open("tests/fixtures/hubble_docai_layout_responses.json", "w") as f:
         json.dump(documents, f)
-
     print("Saved DocAI layout responses.")
 
 

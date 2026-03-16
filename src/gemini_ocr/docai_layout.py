@@ -3,8 +3,8 @@ import re
 import textwrap
 from collections.abc import Generator, Sequence
 
-from anchorite.document import DocumentChunk
-from anchorite.providers import MarkdownProvider
+import anchorite.document
+import anchorite.providers
 from google.cloud import documentai
 
 from gemini_ocr import docai
@@ -180,7 +180,7 @@ class _LayoutProcessor:
 
 
 @dataclasses.dataclass
-class DocAIMarkdownProvider(MarkdownProvider):
+class DocAIMarkdownProvider(anchorite.providers.MarkdownProvider):
     """Markdown provider that generates markdown using Document AI layout."""
 
     project_id: str
@@ -190,7 +190,7 @@ class DocAIMarkdownProvider(MarkdownProvider):
     cache_dir: str | None = None
     cache: bool = True
 
-    async def generate_markdown(self, chunk: DocumentChunk) -> str:
+    async def generate_markdown(self, chunk: anchorite.document.DocumentChunk) -> str:
         process_options = documentai.ProcessOptions(
             layout_config=documentai.ProcessOptions.LayoutConfig(
                 return_bounding_boxes=True,

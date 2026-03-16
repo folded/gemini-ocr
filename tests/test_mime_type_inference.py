@@ -3,8 +3,8 @@ from unittest import mock
 import anchorite.document
 import pytest
 
+from gemini_ocr import gemini as gemini_module
 from gemini_ocr import gemini_ocr
-from gemini_ocr.gemini import GeminiMarkdownProvider
 
 
 def test_inference_pdf() -> None:
@@ -50,7 +50,9 @@ def test_explicit_mime_type_override() -> None:
 async def test_process_document_propagates_mime_type() -> None:
     data = b"some bytes"
     mime_type = "image/png"
-    provider = GeminiMarkdownProvider(project_id="p", location="us-central1", model_name="gemini-2.0-flash")
+    provider = gemini_module.GeminiMarkdownProvider(
+        project_id="p", location="us-central1", model_name="gemini-2.0-flash",
+    )
 
     with mock.patch("anchorite.document.chunks") as mock_chunks:
         mock_chunks.return_value = iter([])

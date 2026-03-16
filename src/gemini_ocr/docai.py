@@ -4,7 +4,7 @@ import logging
 import pathlib
 import typing
 
-from anchorite.document import DocumentChunk
+import anchorite.document
 from google.api_core import client_options
 from google.cloud import documentai
 
@@ -21,7 +21,7 @@ def _call_docai(  # noqa: PLR0913
     documentai_location: str | None,
     processor_id: str,
     process_options: documentai.ProcessOptions,
-    chunk: DocumentChunk,
+    chunk: anchorite.document.DocumentChunk,
 ) -> documentai.Document:
     resolved_location = _resolve_documentai_location(location, documentai_location)
     client = documentai.DocumentProcessorServiceClient(
@@ -38,7 +38,7 @@ def _generate_cache_path(
     cache: bool,
     processor_id: str,
     process_options: documentai.ProcessOptions,
-    chunk: DocumentChunk,
+    chunk: anchorite.document.DocumentChunk,
 ) -> pathlib.Path | None:
     if not cache_dir or not cache:
         return None
@@ -55,7 +55,7 @@ async def process(  # noqa: PLR0913
     location: str,
     processor_id: str,
     process_options: documentai.ProcessOptions,
-    chunk: DocumentChunk,
+    chunk: anchorite.document.DocumentChunk,
     *,
     documentai_location: str | None = None,
     cache_dir: str | None = None,

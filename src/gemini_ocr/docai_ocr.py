@@ -2,8 +2,8 @@ import dataclasses
 import logging
 
 import anchorite
-from anchorite.document import DocumentChunk
-from anchorite.providers import AnchorProvider
+import anchorite.document
+import anchorite.providers
 from google.cloud import documentai
 
 from gemini_ocr import docai
@@ -12,7 +12,7 @@ _BBOX_VERTEX_COUNT = 4
 
 
 @dataclasses.dataclass
-class DocAIAnchorProvider(AnchorProvider):
+class DocAIAnchorProvider(anchorite.providers.AnchorProvider):
     """Anchor provider that generates bounding boxes using Document AI OCR."""
 
     project_id: str
@@ -22,7 +22,7 @@ class DocAIAnchorProvider(AnchorProvider):
     cache_dir: str | None = None
     cache: bool = True
 
-    async def generate_anchors(self, chunk: DocumentChunk) -> list[anchorite.Anchor]:
+    async def generate_anchors(self, chunk: anchorite.document.DocumentChunk) -> list[anchorite.Anchor]:
         process_options = documentai.ProcessOptions(
             ocr_config=documentai.OcrConfig(
                 enable_native_pdf_parsing=True,

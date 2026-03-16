@@ -1,20 +1,20 @@
 from unittest.mock import MagicMock, patch
 
+import anchorite.document
 import pytest
-from anchorite.document import DocumentChunk
 
-from gemini_ocr.gemini import GeminiMarkdownProvider
+from gemini_ocr import gemini as gemini_module
 
 
 @pytest.mark.asyncio
 async def test_generate_markdown_uses_configured_model() -> None:
-    provider = GeminiMarkdownProvider(
+    provider = gemini_module.GeminiMarkdownProvider(
         project_id="test-project",
         location="us-central1",
         model_name="gemini-1.5-pro-preview-0409",
     )
 
-    chunk = DocumentChunk(
+    chunk = anchorite.document.DocumentChunk(
         document_sha256="hash",
         start_page=0,
         end_page=1,

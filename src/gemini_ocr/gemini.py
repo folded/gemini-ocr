@@ -5,9 +5,9 @@ import logging
 import pathlib
 from typing import Final
 
+import anchorite.document
+import anchorite.providers
 import google.auth
-from anchorite.document import DocumentChunk
-from anchorite.providers import MarkdownProvider
 from google import genai
 
 GEMINI_PROMPT: Final[str] = """
@@ -55,7 +55,7 @@ when rendered.**
 
 
 @dataclasses.dataclass
-class GeminiMarkdownProvider(MarkdownProvider):
+class GeminiMarkdownProvider(anchorite.providers.MarkdownProvider):
     """Markdown provider that generates markdown using the Gemini API."""
 
     project_id: str
@@ -66,7 +66,7 @@ class GeminiMarkdownProvider(MarkdownProvider):
     cache_dir: str | None = None
     cache: bool = True
 
-    def _cache_path(self, chunk: DocumentChunk) -> pathlib.Path | None:
+    def _cache_path(self, chunk: anchorite.document.DocumentChunk) -> pathlib.Path | None:
         if not self.cache_dir or not self.cache:
             return None
         hasher = hashlib.sha256()
@@ -78,7 +78,7 @@ class GeminiMarkdownProvider(MarkdownProvider):
         cache_key = f"{hasher.hexdigest()}_{chunk.start_page}_{chunk.end_page}"
         return pathlib.Path(self.cache_dir) / "gemini" / f"{cache_key}.txt"
 
-    def _call(self, chunk: DocumentChunk) -> genai.types.GenerateContentResponse:
+    def _call(self, chunk: anchorite.document.DocumentChunk) -> genai.types.GenerateContentResponse:
         credentials, _ = google.auth.default()
         if self.quota_project_id:
             credentials = credentials.with_quota_project(self.quota_project_id)
@@ -105,7 +105,7 @@ class GeminiMarkdownProvider(MarkdownProvider):
             config=genai.types.GenerateContentConfig(response_mime_type="text/plain"),
         )
 
-    async def generate_markdown(self, chunk: DocumentChunk) -> str:
+    async def generate_markdown(self, chunk: anchorite.document.DocumentChunk) -> str:
         cache_path = self._cache_path(chunk)
 
         if cache_path and cache_path.exists():

@@ -4,9 +4,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from google.cloud import documentai
 
-from gemini_ocr import gemini_ocr
-from gemini_ocr.docai_layout import DocAIMarkdownProvider
-from gemini_ocr.docai_ocr import DocAIAnchorProvider
+from gemini_ocr import docai_layout, docai_ocr, gemini_ocr
 
 
 @patch("anchorite.document.pdfium.PdfDocument")
@@ -61,12 +59,12 @@ async def test_process_document_docai_mode(
     mock_doc.__len__.return_value = 1
     mock_pdf_doc.return_value = mock_doc
 
-    markdown_provider = DocAIMarkdownProvider(
+    markdown_provider = docai_layout.DocAIMarkdownProvider(
         project_id="test-project",
         location="us-central1",
         processor_id="test-layout-processor",
     )
-    anchor_provider = DocAIAnchorProvider(
+    anchor_provider = docai_ocr.DocAIAnchorProvider(
         project_id="test-project",
         location="us-central1",
         processor_id="test-processor",

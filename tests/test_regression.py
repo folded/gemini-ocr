@@ -5,14 +5,12 @@ import typing
 from unittest.mock import AsyncMock, patch
 
 import anchorite
+import anchorite.document
 import pytest
-from anchorite.document import DocumentChunk
 from google.cloud import documentai  # type: ignore[import-untyped]
 
-from gemini_ocr import gemini_ocr
-from gemini_ocr.docai_layout import DocAIMarkdownProvider
-from gemini_ocr.docai_ocr import DocAIAnchorProvider
-from gemini_ocr.gemini import GeminiMarkdownProvider
+from gemini_ocr import docai_layout, docai_ocr, gemini_ocr
+from gemini_ocr import gemini as gemini_module
 
 FIXTURES_DIR = pathlib.Path(__file__).parent / "fixtures"
 
@@ -39,16 +37,18 @@ async def test_hubble_regression() -> None:
         for chunk in bboxes_raw
     ]
 
-    async def mock_gemini_side_effect(chunk: DocumentChunk) -> str:
+    async def mock_gemini_side_effect(chunk: anchorite.document.DocumentChunk) -> str:
         idx = chunk.start_page // 10
         return str(gemini_responses[idx])
 
-    async def mock_ocr_side_effect(chunk: DocumentChunk) -> list[anchorite.Anchor]:
+    async def mock_ocr_side_effect(chunk: anchorite.document.DocumentChunk) -> list[anchorite.Anchor]:
         idx = chunk.start_page // 10
         return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
-    markdown_provider = GeminiMarkdownProvider(project_id=PROJECT, location=LOCATION, model_name="gemini-2.0-flash")
-    anchor_provider = DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
+    markdown_provider = gemini_module.GeminiMarkdownProvider(
+        project_id=PROJECT, location=LOCATION, model_name="gemini-2.0-flash",
+    )
+    anchor_provider = docai_ocr.DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 
     with (
         patch.object(markdown_provider, "generate_markdown", new=AsyncMock(side_effect=mock_gemini_side_effect)),
@@ -96,18 +96,20 @@ async def test_hubble_docai_regression() -> None:
         _location: str,
         _processor_id: str,
         _process_options: documentai.ProcessOptions,
-        chunk: DocumentChunk,
+        chunk: anchorite.document.DocumentChunk,
         **_kwargs: object,
     ) -> documentai.Document:
         idx = chunk.start_page // 10
         return docai_responses[idx]
 
-    async def mock_ocr_side_effect(chunk: DocumentChunk) -> list[anchorite.Anchor]:
+    async def mock_ocr_side_effect(chunk: anchorite.document.DocumentChunk) -> list[anchorite.Anchor]:
         idx = chunk.start_page // 10
         return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
-    markdown_provider = DocAIMarkdownProvider(project_id=PROJECT, location=LOCATION, processor_id="test-layout-id")
-    anchor_provider = DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
+    markdown_provider = docai_layout.DocAIMarkdownProvider(
+        project_id=PROJECT, location=LOCATION, processor_id="test-layout-id",
+    )
+    anchor_provider = docai_ocr.DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 
     with (
         patch("gemini_ocr.docai.process", new=AsyncMock(side_effect=mock_docai_side_effect)),

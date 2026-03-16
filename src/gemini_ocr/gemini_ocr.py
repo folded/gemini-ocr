@@ -4,12 +4,10 @@ import os
 
 import anchorite
 import anchorite.document
-from anchorite.providers import AnchorProvider, MarkdownProvider
+import anchorite.providers
 
-from gemini_ocr.docai_layout import DocAIMarkdownProvider
-from gemini_ocr.docai_ocr import DocAIAnchorProvider
-from gemini_ocr.docling import DoclingMarkdownProvider
-from gemini_ocr.gemini import GeminiMarkdownProvider
+from gemini_ocr import docai_layout, docai_ocr, docling
+from gemini_ocr import gemini as gemini_module
 
 
 class _OcrMode(enum.StrEnum):
@@ -19,7 +17,7 @@ class _OcrMode(enum.StrEnum):
 
 
 @dataclasses.dataclass
-class FixedMarkdownProvider(MarkdownProvider):
+class FixedMarkdownProvider(anchorite.providers.MarkdownProvider):
     """Markdown provider that returns a fixed string."""
 
     markdown_content: str
@@ -28,7 +26,9 @@ class FixedMarkdownProvider(MarkdownProvider):
         return self.markdown_content
 
 
-def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvider | None]:
+def from_env(
+    prefix: str = "GEMINI_OCR_",
+) -> tuple[anchorite.providers.MarkdownProvider, anchorite.providers.AnchorProvider | None]:
     """Build providers from environment variables."""
 
     def get(key: str) -> str | None:
@@ -52,7 +52,7 @@ def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvi
 
     match mode:
         case _OcrMode.GEMINI:
-            markdown_provider: MarkdownProvider = GeminiMarkdownProvider(
+            markdown_provider: anchorite.providers.MarkdownProvider = gemini_module.GeminiMarkdownProvider(
                 project_id=project_id,
                 location=location,
                 model_name=require("gemini_model_name"),
@@ -61,7 +61,7 @@ def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvi
                 cache_dir=cache_dir,
             )
         case _OcrMode.DOCUMENTAI:
-            markdown_provider = DocAIMarkdownProvider(
+            markdown_provider = docai_layout.DocAIMarkdownProvider(
                 project_id=project_id,
                 location=location,
                 processor_id=require("layout_processor_id"),
@@ -69,15 +69,15 @@ def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvi
                 cache_dir=cache_dir,
             )
         case _OcrMode.DOCLING:
-            markdown_provider = DoclingMarkdownProvider()
+            markdown_provider = docling.DoclingMarkdownProvider()
         case _:
             raise ValueError(f"Unknown mode: {mode}")
 
-    anchor_provider: AnchorProvider | None = None
+    anchor_provider: anchorite.providers.AnchorProvider | None = None
     if include_bboxes:
         ocr_processor_id = get("ocr_processor_id")
         if ocr_processor_id:
-            anchor_provider = DocAIAnchorProvider(
+            anchor_provider = docai_ocr.DocAIAnchorProvider(
                 project_id=project_id,
                 location=location,
                 processor_id=ocr_processor_id,
@@ -90,8 +90,8 @@ def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvi
 
 async def process_document(  # noqa: PLR0913
     document_input: anchorite.document.DocumentInput,
-    markdown_provider: MarkdownProvider | None = None,
-    anchor_provider: AnchorProvider | None = None,
+    markdown_provider: anchorite.providers.MarkdownProvider | None = None,
+    anchor_provider: anchorite.providers.AnchorProvider | None = None,
     *,
     page_count: int = 10,
     mime_type: str | None = None,

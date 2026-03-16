@@ -30,8 +30,6 @@ dependencies = [
     "anchorite==0.2.0",
 ]
 
-[tool.uv.sources]
-anchorite = { path = "../anchorite", editable = true }
 
 [dependency-groups]
 dev = [

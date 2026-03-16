@@ -134,26 +134,15 @@ wheels = [
 [[package]]
 name = "anchorite"
 version = "0.2.0"
-source = { editable = "../anchorite" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fsspec" },
     { name = "pypdfium2" },
     { name = "seq-smith" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "fsspec" },
-    { name = "pypdfium2" },
-    { name = "seq-smith", specifier = ">=0.5.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "ruff", specifier = ">=0.14.6" },
+sdist = { url = "https://files.pythonhosted.org/packages/b0/a4/2ee292f6cfea1db2f4c31ee591a6083b38cddb491914b4b172cbd59e1f19/anchorite-0.2.0.tar.gz", hash = "sha256:fdf758a4009eeec433d24668f0f69c3d9074fa66f35539357f35b5a0c89b6273", size = 4262583, upload-time = "2026-03-16T05:49:28.507Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6a/bb/07276db60c98febd920210678607585ac849d06e5717532e1f057acee1f3/anchorite-0.2.0-py3-none-any.whl", hash = "sha256:d2e0b6f4314451a8f1848f39699c9b1596bcb39e109b679f7d5f9352d9f2ac57", size = 25450, upload-time = "2026-03-16T05:49:27.121Z" },
 ]
 
 [[package]]
@@ -461,7 +450,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anchorite", editable = "../anchorite" },
+    { name = "anchorite", specifier = "==0.2.0" },
     { name = "fsspec" },
     { name = "gcsfs" },
     { name = "google-cloud-documentai" },

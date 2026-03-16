@@ -4,90 +4,73 @@
 
 ## Traceable Generative Markdown for PDFs
 
-Gemini OCR is a library designed to convert PDF documents into clean, semantic Markdown while maintaining precise traceability back to the source coordinates. It bridges the gap between the readability of Generative AI (Gemini, Document AI Chunking) and the grounded accuracy of traditional OCR (Google Document AI).
+`gemini-ocr` provides [anchorite](https://github.com/folded/anchorite) provider
+plugins that convert PDFs to traceable Markdown using Google Cloud APIs.
 
-## Key Features
-
-- **Generative Markdown**: Uses Google's Gemini Pro or Document AI Layout models to generate human-readable Markdown with proper structure (headers, tables, lists).
-- **Precision Traceability**: Aligns the generated Markdown text back to the original PDF coordinates using detailed OCR data from Google Document AI.
-- **Reverse-Alignment Algorithm**: Implements a robust "reverse-alignment" strategy that starts with the readable text and finds the corresponding bounding boxes, ensuring the Markdown is the ground truth for content.
-- **Confidence Metrics**: (New) Includes coverage metrics to quantify how much of the Markdown content is successfully backed by OCR data.
-- **Pagination Support**: Automatically handles PDF page splitting and merging logic.
-
-## Architecture
-
-The library processes documents in two parallel streams:
-
-1. **Semantic Stream**: The PDF is sent to a Generative AI model (e.g., Gemini 2.5 Flash) to produce a clean Markdown representation.
-2. **Positional Stream**: The PDF is sent to Google Document AI to extract raw bounding boxes and text segments.
-
-These two streams are then merged using a custom alignment engine (`seq_smith` + `bbox_alignment.py`) which:
-
-1. Normalizes both text sources.
-2. Identifies "anchor" comparisons for reliable alignment.
-3. Computes a global alignment using the anchors to constrain the search space.
-4. Identifies significant gaps or mismatches.
-5. Recursively re-aligns mismatched regions until a high-quality alignment is achieved.
-
-**Key Features:**
-
-- **Robust to Cleanliness Issues:** Handles extra headers/footers, watermarks, and noisy OCR artifacts.
-- **Scale-Invariant:** Recursion ensures even small missed sections in large documents are recovered.
+- **`GeminiMarkdownProvider`** — generates Markdown via the Gemini API
+- **`DocAIMarkdownProvider`** — generates Markdown via Document AI Layout
+- **`DocAIAnchorProvider`** — extracts bounding boxes via Document AI OCR
+- **`DoclingMarkdownProvider`** — generates Markdown via Docling (stub)
 
 ## Quick Start
 
 ```python
 import asyncio
 from pathlib import Path
-from gemini_ocr import gemini_ocr, settings
+
+import anchorite
+from gemini_ocr import DocAIAnchorProvider, GeminiMarkdownProvider
 
 async def main():
-    # Configure settings
-    ocr_settings = settings.Settings(
-        project="my-gcp-project",
-        location="us",
-        gcp_project_id="my-gcp-project",
-        layout_processor_id="projects/.../processors/...",
-        ocr_processor_id="projects/.../processors/...",
-        mode=settings.OcrMode.GEMINI,
+    markdown_provider = GeminiMarkdownProvider(
+        project_id="my-gcp-project",
+        location="us-central1",
+        model_name="gemini-2.5-flash",
+    )
+    anchor_provider = DocAIAnchorProvider(
+        project_id="my-gcp-project",
+        location="us-central1",
+        processor_id="projects/.../processors/...",
     )
 
-    file_path = Path("path/to/document.pdf")
+    chunks = anchorite.document.chunks(Path("document.pdf"))
+    result = await anchorite.process_document(
+        chunks, markdown_provider, anchor_provider, renumber=True
+    )
 
-    # Process the document
-    result = await gemini_ocr.process_document(ocr_settings, file_path)
+    print(result.markdown_content)
+    print(result.annotate())   # Markdown with inline <span data-bbox="..."> tags
 
-    # Access results
-    print(f"Coverage: {result.coverage_percent:.2%}")
-
-    # Get annotated HTML-compatible Markdown
-    annotated_md = result.annotate()
-    print(annotated_md[:500])  # View first 500 chars
-
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
 ```
 
-## Configuration
+## Configuration via Environment Variables
 
-The `gemini_ocr.settings.Settings` class controls the behavior:
+`from_env()` builds providers from environment variables, useful for
+twelve-factor deployments:
 
-| Parameter                        | Type      | Description                                                      |
-| :------------------------------- | :-------- | :--------------------------------------------------------------- |
-| `project`                        | `str`     | GCP Project Name                                                 |
-| `location`                       | `str`     | GCP Location (e.g., `us`, `eu`)                                  |
-| `gcp_project_id`                 | `str`     | GCP Project ID (might be same as `project`)                      |
-| `layout_processor_id`            | `str`     | Document AI Processor ID for Layout (if using `DOCUMENTAI` mode) |
-| `ocr_processor_id`               | `str`     | Document AI Processor ID for OCR (required for bounding boxes)   |
-| `mode`                           | `OcrMode` | `GEMINI` (default), `DOCUMENTAI`, or `DOCLING`                   |
-| `gemini_model_name`              | `str`     | Gemini model to use (default: `gemini-2.5-flash`)                |
-| `alignment_uniqueness_threshold` | `float`   | Min score ratio for unique match (default: `0.5`)                |
-| `alignment_min_overlap`          | `float`   | Min overlap fraction for valid match (default: `0.9`)            |
-| `include_bboxes`                 | `bool`    | Whether to perform alignment (default: `True`)                   |
-| `markdown_page_batch_size`       | `int`     | Pages per batch for Markdown generation (default: `10`)          |
-| `ocr_page_batch_size`            | `int`     | Pages per batch for OCR (default: `10`)                          |
-| `num_jobs`                       | `int`     | Max concurrent jobs (default: `10`)                              |
-| `cache_dir`                      | `str`     | Directory to store API response cache (default: `.docai_cache`)  |
+```python
+import anchorite
+from gemini_ocr import from_env
+
+markdown_provider, anchor_provider = from_env()
+chunks = anchorite.document.chunks(Path("document.pdf"))
+result = await anchorite.process_document(chunks, markdown_provider, anchor_provider)
+```
+
+| Variable                          | Description                                                      |
+| :-------------------------------- | :--------------------------------------------------------------- |
+| `GEMINI_OCR_PROJECT_ID`           | GCP project ID (required)                                        |
+| `GEMINI_OCR_LOCATION`             | GCP location (default: `us-central1`)                            |
+| `GEMINI_OCR_MODE`                 | `gemini` (default), `documentai`, or `docling`                   |
+| `GEMINI_OCR_GEMINI_MODEL_NAME`    | Gemini model name (required in `gemini` mode)                    |
+| `GEMINI_OCR_LAYOUT_PROCESSOR_ID`  | Document AI processor ID (required in `documentai` mode)         |
+| `GEMINI_OCR_OCR_PROCESSOR_ID`     | Document AI OCR processor ID (enables bounding box extraction)   |
+| `GEMINI_OCR_DOCUMENTAI_LOCATION`  | Document AI endpoint location override                           |
+| `GEMINI_OCR_QUOTA_PROJECT_ID`     | Quota project override for Gemini API calls                      |
+| `GEMINI_OCR_GEMINI_PROMPT`        | Additional prompt appended to the default Gemini prompt          |
+| `GEMINI_OCR_CACHE_DIR`            | Directory for caching API responses                              |
+| `GEMINI_OCR_INCLUDE_BBOXES`       | Set to `false` to skip bounding box extraction (default: `true`) |
 
 ## License
 

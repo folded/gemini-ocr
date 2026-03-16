@@ -1,7 +1,6 @@
 import dataclasses
 
-import anchorite.document
-import anchorite.providers
+import anchorite
 
 
 @dataclasses.dataclass

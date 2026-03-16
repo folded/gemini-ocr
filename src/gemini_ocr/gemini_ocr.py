@@ -3,8 +3,6 @@ import enum
 import os
 
 import anchorite
-import anchorite.document
-import anchorite.providers
 
 from gemini_ocr import docai_layout, docai_ocr, docling
 from gemini_ocr import gemini as gemini_module

@@ -3,8 +3,7 @@ import re
 import textwrap
 from collections.abc import Generator, Sequence
 
-import anchorite.document
-import anchorite.providers
+import anchorite
 from google.cloud import documentai
 
 from gemini_ocr import docai

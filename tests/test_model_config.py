@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-import anchorite.document
+import anchorite
 import pytest
 
 from gemini_ocr import gemini as gemini_module

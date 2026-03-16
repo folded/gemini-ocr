@@ -5,8 +5,7 @@ import logging
 import pathlib
 from typing import Final
 
-import anchorite.document
-import anchorite.providers
+import anchorite
 import google.auth
 from google import genai
 

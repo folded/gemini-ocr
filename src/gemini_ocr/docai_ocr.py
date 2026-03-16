@@ -2,8 +2,6 @@ import dataclasses
 import logging
 
 import anchorite
-import anchorite.document
-import anchorite.providers
 from google.cloud import documentai
 
 from gemini_ocr import docai

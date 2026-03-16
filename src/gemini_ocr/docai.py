@@ -4,7 +4,7 @@ import logging
 import pathlib
 import typing
 
-import anchorite.document
+import anchorite
 from google.api_core import client_options
 from google.cloud import documentai
 

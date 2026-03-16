@@ -5,7 +5,6 @@ import typing
 from unittest.mock import AsyncMock, patch
 
 import anchorite
-import anchorite.document
 import pytest
 from google.cloud import documentai  # type: ignore[import-untyped]
 

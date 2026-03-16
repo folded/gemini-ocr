@@ -1,10 +1,11 @@
 import pathlib
 from unittest.mock import MagicMock, patch
 
+import anchorite
 import pytest
 from google.cloud import documentai
 
-from gemini_ocr import docai_layout, docai_ocr, gemini_ocr
+from gemini_ocr import docai_layout, docai_ocr
 
 
 @patch("anchorite.document.pdfium.PdfDocument")
@@ -70,7 +71,8 @@ async def test_process_document_docai_mode(
         processor_id="test-processor",
     )
 
-    result = await gemini_ocr.process_document(dummy_pdf_path, markdown_provider, anchor_provider)
+    chunks = anchorite.document.chunks(dummy_pdf_path)
+    result = await anchorite.process_document(chunks, markdown_provider, anchor_provider, renumber=True)
 
     assert "Hello" in result.markdown_content
     assert len(result.anchor_spans) == 1

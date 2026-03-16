@@ -1,4 +1,3 @@
-import dataclasses
 import enum
 import os
 
@@ -12,16 +11,6 @@ class _OcrMode(enum.StrEnum):
     GEMINI = "gemini"
     DOCUMENTAI = "documentai"
     DOCLING = "docling"
-
-
-@dataclasses.dataclass
-class FixedMarkdownProvider(anchorite.providers.MarkdownProvider):
-    """Markdown provider that returns a fixed string."""
-
-    markdown_content: str
-
-    async def generate_markdown(self, _chunk: anchorite.document.DocumentChunk) -> str:
-        return self.markdown_content
 
 
 def from_env(
@@ -84,28 +73,3 @@ def from_env(
             )
 
     return markdown_provider, anchor_provider
-
-
-async def process_document(  # noqa: PLR0913
-    document_input: anchorite.document.DocumentInput,
-    markdown_provider: anchorite.providers.MarkdownProvider | None = None,
-    anchor_provider: anchorite.providers.AnchorProvider | None = None,
-    *,
-    page_count: int = 10,
-    mime_type: str | None = None,
-    alignment_uniqueness_threshold: float = 0.5,
-    alignment_min_overlap: float = 0.9,
-) -> anchorite.AlignmentResult:
-    """Process a document, generating annotated markdown with OCR bounding boxes."""
-    if markdown_provider is None:
-        markdown_provider, anchor_provider = from_env()
-
-    chunks = anchorite.document.chunks(document_input, page_count=page_count, mime_type=mime_type)
-    return await anchorite.process_document(
-        chunks,
-        markdown_provider,
-        anchor_provider,
-        alignment_uniqueness_threshold=alignment_uniqueness_threshold,
-        alignment_min_overlap=alignment_min_overlap,
-        renumber=True,
-    )

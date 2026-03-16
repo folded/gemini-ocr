@@ -8,7 +8,7 @@ import anchorite
 import pytest
 from google.cloud import documentai  # type: ignore[import-untyped]
 
-from gemini_ocr import docai_layout, docai_ocr, gemini_ocr
+from gemini_ocr import docai_layout, docai_ocr
 from gemini_ocr import gemini as gemini_module
 
 FIXTURES_DIR = pathlib.Path(__file__).parent / "fixtures"
@@ -53,7 +53,8 @@ async def test_hubble_regression() -> None:
         patch.object(markdown_provider, "generate_markdown", new=AsyncMock(side_effect=mock_gemini_side_effect)),
         patch.object(anchor_provider, "generate_anchors", new=AsyncMock(side_effect=mock_ocr_side_effect)),
     ):
-        result = await gemini_ocr.process_document(pdf_path, markdown_provider, anchor_provider)
+        chunks = anchorite.document.chunks(pdf_path)
+        result = await anchorite.process_document(chunks, markdown_provider, anchor_provider, renumber=True)
 
     output_md = result.annotate()
     golden_path = FIXTURES_DIR / "hubble_golden.md"
@@ -114,7 +115,8 @@ async def test_hubble_docai_regression() -> None:
         patch("gemini_ocr.docai.process", new=AsyncMock(side_effect=mock_docai_side_effect)),
         patch.object(anchor_provider, "generate_anchors", new=AsyncMock(side_effect=mock_ocr_side_effect)),
     ):
-        result = await gemini_ocr.process_document(pdf_path, markdown_provider, anchor_provider)
+        chunks = anchorite.document.chunks(pdf_path)
+        result = await anchorite.process_document(chunks, markdown_provider, anchor_provider, renumber=True)
 
     output_md = result.annotate()
     golden_path = FIXTURES_DIR / "hubble_docai_golden.md"

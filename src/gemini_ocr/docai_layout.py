@@ -3,13 +3,15 @@ import re
 import textwrap
 from collections.abc import Generator, Sequence
 
+from anchorite.document import DocumentChunk
+from anchorite.providers import MarkdownProvider
 from google.cloud import documentai
 
-from gemini_ocr import docai, document, settings
+from gemini_ocr import docai
 
 
 @dataclasses.dataclass
-class TableCell:
+class _TableCell:
     """Represents a single cell within a table structure."""
 
     content: str
@@ -26,7 +28,7 @@ class TableCell:
     """True if this cell falls within a header row."""
 
 
-class LayoutProcessor:
+class _LayoutProcessor:
     def process(
         self,
         blocks: Sequence[documentai.Document.DocumentLayout.DocumentLayoutBlock],
@@ -95,7 +97,7 @@ class LayoutProcessor:
     def _build_table_grid(
         self,
         table_block: documentai.Document.DocumentLayout.DocumentLayoutBlock.LayoutTableBlock,
-    ) -> tuple[dict[tuple[int, int], TableCell], int, int]:
+    ) -> tuple[dict[tuple[int, int], _TableCell], int, int]:
         all_rows = [(r, True) for r in table_block.header_rows] + [(r, False) for r in table_block.body_rows]
 
         occupied = set()
@@ -116,7 +118,7 @@ class LayoutProcessor:
                 row_span = max(1, cell.row_span)
                 col_span = max(1, cell.col_span)
 
-                grid[(current_row_idx, current_col_idx)] = TableCell(
+                grid[(current_row_idx, current_col_idx)] = _TableCell(
                     content=cell_text,
                     row_pos=current_row_idx,
                     col_pos=current_col_idx,
@@ -138,7 +140,7 @@ class LayoutProcessor:
 
     def _render_table(
         self,
-        grid: dict[tuple[int, int], TableCell],
+        grid: dict[tuple[int, int], _TableCell],
         num_rows: int,
         num_cols: int,
         has_header: bool,
@@ -177,33 +179,31 @@ class LayoutProcessor:
                 raise ValueError(f"Unknown block type: {block}")
 
 
-async def _run_document_ai(settings: settings.Settings, chunk: document.DocumentChunk) -> documentai.Document:
-    process_options = documentai.ProcessOptions(
-        layout_config=documentai.ProcessOptions.LayoutConfig(
-            return_bounding_boxes=True,
-        ),
-    )
+@dataclasses.dataclass
+class DocAIMarkdownProvider(MarkdownProvider):
+    """Markdown provider that generates markdown using Document AI layout."""
 
-    if settings.layout_processor_id is None:
-        raise ValueError("Layout processor ID is not set")
+    project_id: str
+    location: str
+    processor_id: str
+    documentai_location: str | None = None
+    cache_dir: str | None = None
+    cache: bool = True
 
-    return await docai.process(settings, process_options, settings.layout_processor_id, chunk)
-
-
-async def generate_markdown(
-    settings: settings.Settings,
-    chunk: document.DocumentChunk,
-) -> str:
-    """Generates Markdown from a Document AI chunk.
-
-    Args:
-        settings: OCR settings.
-        chunk: The document chunk (usually a single page or small range).
-
-    Returns:
-        The generated Markdown string.
-    """
-    doc_result = await _run_document_ai(settings, chunk)
-    processor = LayoutProcessor()
-
-    return "".join(processor.process(doc_result.document_layout.blocks))
+    async def generate_markdown(self, chunk: DocumentChunk) -> str:
+        process_options = documentai.ProcessOptions(
+            layout_config=documentai.ProcessOptions.LayoutConfig(
+                return_bounding_boxes=True,
+            ),
+        )
+        doc = await docai.process(
+            self.project_id,
+            self.location,
+            self.processor_id,
+            process_options,
+            chunk,
+            documentai_location=self.documentai_location,
+            cache_dir=self.cache_dir,
+            cache=self.cache,
+        )
+        return "".join(_LayoutProcessor().process(doc.document_layout.blocks))

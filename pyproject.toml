@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gemini-ocr"
-version = "0.4.0"
+version = "0.5.0"
 authors = [
     { name = "Tobias Sargeant", email = "tobias.sargeant@gmail.com" },
 ]
@@ -24,11 +24,14 @@ dependencies = [
     "google-genai",
     "google-cloud-documentai",
     "pymupdf",
-    "seq-smith>=0.5.1",
     "python-dotenv>=1.2.1",
     "fsspec",
     "gcsfs",
+    "anchorite==0.2.0",
 ]
+
+[tool.uv.sources]
+anchorite = { path = "../anchorite", editable = true }
 
 [dependency-groups]
 dev = [

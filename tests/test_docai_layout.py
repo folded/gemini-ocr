@@ -49,7 +49,7 @@ def test_layout_processor_table_tags() -> None:
     table_block.table_block.header_rows = [row_1]
     table_block.table_block.body_rows = [row_2]
 
-    processor = docai_layout.LayoutProcessor()
+    processor = docai_layout._LayoutProcessor()
     # Processor expects a list of blocks
     result = "".join(processor.process([text_block, table_block]))
 
@@ -71,7 +71,7 @@ def test_multiple_tables() -> None:
     table_block.table_block.header_rows = []
     table_block.table_block.body_rows = []
 
-    processor = docai_layout.LayoutProcessor()
+    processor = docai_layout._LayoutProcessor()
     result = "".join(processor.process([table_block, table_block]))
 
     assert result.count("<!--table-->") == 2

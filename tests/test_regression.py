@@ -1,140 +1,127 @@
 import json
 import os
 import pathlib
-import pickle
 import typing
 from unittest.mock import AsyncMock, patch
 
+import anchorite
 import pytest
+from anchorite.document import DocumentChunk
 from google.cloud import documentai  # type: ignore[import-untyped]
 
-from gemini_ocr import document, gemini_ocr, settings
+from gemini_ocr import gemini_ocr
+from gemini_ocr.docai_layout import DocAIMarkdownProvider
+from gemini_ocr.docai_ocr import DocAIAnchorProvider
+from gemini_ocr.gemini import GeminiMarkdownProvider
 
 FIXTURES_DIR = pathlib.Path(__file__).parent / "fixtures"
 
-
-@pytest.fixture
-def regression_settings() -> settings.Settings:
-    return settings.Settings(
-        project_id="test-project",
-        location="us-central1",
-        layout_processor_id="test-layout",
-        ocr_processor_id="test-ocr",
-        mode=settings.OcrMode.GEMINI,
-        cache_dir=None,
-    )
+PROJECT = "test-project"
+LOCATION = "us-central1"
 
 
 @pytest.mark.asyncio
-async def test_hubble_regression(regression_settings: settings.Settings) -> None:
+async def test_hubble_regression() -> None:
     pdf_path = pathlib.Path("tests/data/hubble-1929.pdf")
     if not pdf_path.exists():
         pytest.skip("Regression test PDF not found")
 
-    # Load fixtures
-    # Load fixtures
     with open(FIXTURES_DIR / "hubble_gemini_responses.json") as f:
         gemini_responses = json.load(f)
 
-    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f_bin:
-        docai_bboxes = pickle.load(f_bin)  # noqa: S301
+    with open(FIXTURES_DIR / "hubble_docai_bboxes.json") as f_json:
+        bboxes_raw = json.load(f_json)
+    docai_bboxes = [
+        [
+            anchorite.Anchor(text=a["text"], page=a["page"], boxes=tuple(anchorite.BBox(**b) for b in a["boxes"]))
+            for a in chunk
+        ]
+        for chunk in bboxes_raw
+    ]
 
-    async def mock_gemini_side_effect(_settings: settings.Settings, chunk: document.DocumentChunk) -> str:
+    async def mock_gemini_side_effect(chunk: DocumentChunk) -> str:
         idx = chunk.start_page // 10
         return str(gemini_responses[idx])
 
-    async def mock_ocr_side_effect(
-        _settings: settings.Settings,
-        chunk: document.DocumentChunk,
-    ) -> list[document.BoundingBox]:
+    async def mock_ocr_side_effect(chunk: DocumentChunk) -> list[anchorite.Anchor]:
         idx = chunk.start_page // 10
-        return typing.cast("list[document.BoundingBox]", docai_bboxes[idx])
+        return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
-    # Patch
-    with patch("gemini_ocr.gemini.generate_markdown", new_callable=AsyncMock) as mock_gemini:
-        mock_gemini.side_effect = mock_gemini_side_effect
+    markdown_provider = GeminiMarkdownProvider(project_id=PROJECT, location=LOCATION, model_name="gemini-2.0-flash")
+    anchor_provider = DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 
-        with patch("gemini_ocr.docai_ocr.generate_bounding_boxes", new_callable=AsyncMock) as mock_ocr:
-            mock_ocr.side_effect = mock_ocr_side_effect
+    with (
+        patch.object(markdown_provider, "generate_markdown", new=AsyncMock(side_effect=mock_gemini_side_effect)),
+        patch.object(anchor_provider, "generate_anchors", new=AsyncMock(side_effect=mock_ocr_side_effect)),
+    ):
+        result = await gemini_ocr.process_document(pdf_path, markdown_provider, anchor_provider)
 
-            # Run
-            result = await gemini_ocr.process_document(pdf_path, settings=regression_settings)
+    output_md = result.annotate()
+    golden_path = FIXTURES_DIR / "hubble_golden.md"
 
-            # Annotate
-            output_md = result.annotate()
+    if os.environ.get("UPDATE_GOLDEN"):
+        golden_path.write_text(output_md)
 
-            # Compare with golden
-            golden_path = FIXTURES_DIR / "hubble_golden.md"
+    if not golden_path.exists():
+        pytest.fail("Golden file not found. Run with UPDATE_GOLDEN=1 to generate it.")
 
-            if os.environ.get("UPDATE_GOLDEN"):
-                golden_path.write_text(output_md)
-
-            if not golden_path.exists():
-                pytest.fail("Golden file not found. Run with UPDATE_GOLDEN=1 to generate it.")
-
-            expected = golden_path.read_text()
-            assert output_md == expected
+    assert output_md == golden_path.read_text()
 
 
 @pytest.mark.asyncio
-async def test_hubble_docai_regression(regression_settings: settings.Settings) -> None:
+async def test_hubble_docai_regression() -> None:
     pdf_path = pathlib.Path("tests/data/hubble-1929.pdf")
     if not pdf_path.exists():
         pytest.skip("Regression test PDF not found")
 
-    docai_settings = regression_settings
-    docai_settings.mode = settings.OcrMode.DOCUMENTAI
-    docai_settings.layout_processor_id = "test-layout-id"  # Mocked anyway
-
-    # Load fixtures
     with open(FIXTURES_DIR / "hubble_docai_layout_responses.json") as f:
         docai_responses_json = json.load(f)
 
-    # Deserialize list of JSON strings to documentai.Document objects
     docai_responses = [
         typing.cast("documentai.Document", documentai.Document.from_json(j)) for j in docai_responses_json
     ]
 
-    with open(FIXTURES_DIR / "hubble_docai_bboxes.pkl", "rb") as f_bin:
-        docai_bboxes = pickle.load(f_bin)  # noqa: S301
+    with open(FIXTURES_DIR / "hubble_docai_bboxes.json") as f_json:
+        bboxes_raw = json.load(f_json)
+    docai_bboxes = [
+        [
+            anchorite.Anchor(text=a["text"], page=a["page"], boxes=tuple(anchorite.BBox(**b) for b in a["boxes"]))
+            for a in chunk
+        ]
+        for chunk in bboxes_raw
+    ]
 
     async def mock_docai_side_effect(
-        _settings: settings.Settings,
-        _process_options: documentai.ProcessOptions,
+        _project_id: str,
+        _location: str,
         _processor_id: str,
-        chunk: document.DocumentChunk,
+        _process_options: documentai.ProcessOptions,
+        chunk: DocumentChunk,
+        **_kwargs: object,
     ) -> documentai.Document:
         idx = chunk.start_page // 10
         return docai_responses[idx]
 
-    async def mock_ocr_side_effect(
-        _settings: settings.Settings,
-        chunk: document.DocumentChunk,
-    ) -> list[document.BoundingBox]:
+    async def mock_ocr_side_effect(chunk: DocumentChunk) -> list[anchorite.Anchor]:
         idx = chunk.start_page // 10
-        return typing.cast("list[document.BoundingBox]", docai_bboxes[idx])
+        return typing.cast("list[anchorite.Anchor]", docai_bboxes[idx])
 
-    # Patch
-    with patch("gemini_ocr.docai.process", new_callable=AsyncMock) as mock_process:
-        mock_process.side_effect = mock_docai_side_effect
+    markdown_provider = DocAIMarkdownProvider(project_id=PROJECT, location=LOCATION, processor_id="test-layout-id")
+    anchor_provider = DocAIAnchorProvider(project_id=PROJECT, location=LOCATION, processor_id="test-ocr")
 
-        with patch("gemini_ocr.docai_ocr.generate_bounding_boxes", new_callable=AsyncMock) as mock_ocr:
-            mock_ocr.side_effect = mock_ocr_side_effect
+    with (
+        patch("gemini_ocr.docai.process", new=AsyncMock(side_effect=mock_docai_side_effect)),
+        patch.object(anchor_provider, "generate_anchors", new=AsyncMock(side_effect=mock_ocr_side_effect)),
+    ):
+        result = await gemini_ocr.process_document(pdf_path, markdown_provider, anchor_provider)
 
-            # Run
-            result = await gemini_ocr.process_document(pdf_path, settings=docai_settings)
+    output_md = result.annotate()
+    golden_path = FIXTURES_DIR / "hubble_docai_golden.md"
 
-            # Annotate
-            output_md = result.annotate()
+    if os.environ.get("UPDATE_GOLDEN"):
+        golden_path.write_text(output_md)
 
-            # Compare with golden
-            golden_path = FIXTURES_DIR / "hubble_docai_golden.md"
+    if not golden_path.exists():
+        pytest.fail("Golden file not found. Run with UPDATE_GOLDEN=1 to generate it.")
 
-            if os.environ.get("UPDATE_GOLDEN"):
-                golden_path.write_text(output_md)
-
-            if not golden_path.exists():
-                pytest.fail("Golden file not found. Run with UPDATE_GOLDEN=1 to generate it.")
-
-            expected = golden_path.read_text()
-            assert output_md == expected
+    assert output_md == golden_path.read_text()

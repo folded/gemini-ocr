@@ -1,205 +1,113 @@
-import asyncio
-import collections
 import dataclasses
-import itertools
-import re
-import typing
+import enum
+import os
 
-from gemini_ocr import bbox_alignment, docai_layout, docai_ocr, docling, document, gemini
-from gemini_ocr import settings as settings_module
+import anchorite
+import anchorite.document
+from anchorite.providers import AnchorProvider, MarkdownProvider
 
-T = typing.TypeVar("T")
+from gemini_ocr.docai_layout import DocAIMarkdownProvider
+from gemini_ocr.docai_ocr import DocAIAnchorProvider
+from gemini_ocr.docling import DoclingMarkdownProvider
+from gemini_ocr.gemini import GeminiMarkdownProvider
+
+
+class _OcrMode(enum.StrEnum):
+    GEMINI = "gemini"
+    DOCUMENTAI = "documentai"
+    DOCLING = "docling"
 
 
 @dataclasses.dataclass
-class RawOcrData:
-    """Intermediate data structure holding raw OCR/Markdown output."""
+class FixedMarkdownProvider(MarkdownProvider):
+    """Markdown provider that returns a fixed string."""
 
     markdown_content: str
-    """The generated markdown string."""
-    bounding_boxes: list[document.BoundingBox]
-    """List of all bounding boxes extracted from the document."""
+
+    async def generate_markdown(self, _chunk: anchorite.document.DocumentChunk) -> str:
+        return self.markdown_content
 
 
-@dataclasses.dataclass
-class OcrResult:
-    """The final result of the OCR and annotation process."""
+def from_env(prefix: str = "GEMINI_OCR_") -> tuple[MarkdownProvider, AnchorProvider | None]:
+    """Build providers from environment variables."""
 
-    markdown_content: str
-    """The generated markdown content."""
-    bounding_boxes: dict[document.BoundingBox, tuple[int, int]]
-    """Mapping of bounding boxes to their span ranges in the markdown."""
-    coverage_percent: float
-    """Percentage of markdown content covered by aligned bounding boxes."""
+    def get(key: str) -> str | None:
+        return os.getenv(prefix + key.upper())
 
-    def annotate(self) -> str:
-        """Annotates the markdown content with bounding box spans."""
+    def require(key: str) -> str:
+        val = get(key)
+        if val is None:
+            raise ValueError(f"{prefix}{key.upper()} environment variable is required.")
+        return val
 
-        # 1. Identify math ranges to snap to (to avoid inserting tags inside math)
-        math_ranges = []
-        # Pattern matches $$...$$ (DOTALL) or $...$ (inline, allowing newlines for wrapped text)
-        pattern = re.compile(r"(\$\$[\s\S]+?\$\$|\$(?:\\.|[^$])+?\$)")
-        for m in pattern.finditer(self.markdown_content):
-            math_ranges.append((m.start(), m.end()))
+    def getdefault(key: str, default: str) -> str:
+        return os.getenv(prefix + key.upper(), default)
 
-        insertions = []
-        for bbox, (span_start, span_end) in self.bounding_boxes.items():
-            start, end = span_start, span_end
-            # Check for overlap with math ranges
-            for m_start, m_end in math_ranges:
-                # If overlap (we check if the range intersects the math range)
-                if max(start, m_start) < min(end, m_end):
-                    # Snap to the math range
-                    start = m_start
-                    end = m_end
-                    break
+    project_id = require("project_id")
+    location = getdefault("location", "us-central1")
+    documentai_location = get("documentai_location")
+    cache_dir = get("cache_dir")
+    mode = _OcrMode(getdefault("mode", _OcrMode.GEMINI))
+    include_bboxes = getdefault("include_bboxes", "true").lower() in ("true", "1", "yes")
 
-            length = end - start
-            bbox_str = f"{bbox.rect.top},{bbox.rect.left},{bbox.rect.bottom},{bbox.rect.right}"
-            start_tag = f'<span class="ocr_bbox" data-bbox="{bbox_str}" data-page="{bbox.page}">'
-            end_tag = "</span>"
-
-            insertions.append((start, False, length, start_tag))
-            insertions.append((end, True, length, end_tag))
-
-        # Sort:
-        # 1. Index Descending.
-        # 2. is_end Descending (True/End processed before False/Start).
-        # 3. Length Ascending (Short processed before Long).
-
-        insertions.sort(key=lambda x: (x[0], x[1], -x[2]), reverse=True)
-
-        chars = list(self.markdown_content)
-        for index, _, _, text in insertions:
-            chars.insert(index, text)
-
-        return "".join(chars)
-
-
-async def _generate_markdown_for_chunk(
-    ocr_settings: settings_module.Settings,
-    chunk: document.DocumentChunk,
-) -> str:
-    """Generates markdown for a chunk using the Gemini API."""
-
-    match ocr_settings.mode:
-        case settings_module.OcrMode.GEMINI:
-            text = await gemini.generate_markdown(ocr_settings, chunk)
-        case settings_module.OcrMode.DOCUMENTAI:
-            text = await docai_layout.generate_markdown(ocr_settings, chunk)
-        case settings_module.OcrMode.DOCLING:
-            text = await docling.generate_markdown(ocr_settings, chunk)
+    match mode:
+        case _OcrMode.GEMINI:
+            markdown_provider: MarkdownProvider = GeminiMarkdownProvider(
+                project_id=project_id,
+                location=location,
+                model_name=require("gemini_model_name"),
+                quota_project_id=get("quota_project_id"),
+                prompt=get("gemini_prompt"),
+                cache_dir=cache_dir,
+            )
+        case _OcrMode.DOCUMENTAI:
+            markdown_provider = DocAIMarkdownProvider(
+                project_id=project_id,
+                location=location,
+                processor_id=require("layout_processor_id"),
+                documentai_location=documentai_location,
+                cache_dir=cache_dir,
+            )
+        case _OcrMode.DOCLING:
+            markdown_provider = DoclingMarkdownProvider()
         case _:
-            text = None
+            raise ValueError(f"Unknown mode: {mode}")
 
-    return text or ""
+    anchor_provider: AnchorProvider | None = None
+    if include_bboxes:
+        ocr_processor_id = get("ocr_processor_id")
+        if ocr_processor_id:
+            anchor_provider = DocAIAnchorProvider(
+                project_id=project_id,
+                location=location,
+                processor_id=ocr_processor_id,
+                documentai_location=documentai_location,
+                cache_dir=cache_dir,
+            )
+
+    return markdown_provider, anchor_provider
 
 
-# --- Merging and Annotation ---
-
-
-async def _batched_gather(tasks: collections.abc.Sequence[collections.abc.Awaitable[T]], batch_size: int) -> list[T]:
-    """Runs awaitables in batches."""
-    results = []
-    for i in range(0, len(tasks), batch_size):
-        batch = tasks[i : i + batch_size]
-        results.extend(await asyncio.gather(*batch))
-    return results
-
-
-async def extract_raw_data(
-    document_input: document.DocumentInput,
-    settings: settings_module.Settings | None = None,
-    markdown_content: str | None = None,
+async def process_document(  # noqa: PLR0913
+    document_input: anchorite.document.DocumentInput,
+    markdown_provider: MarkdownProvider | None = None,
+    anchor_provider: AnchorProvider | None = None,
+    *,
+    page_count: int = 10,
     mime_type: str | None = None,
-) -> RawOcrData:
-    """
-    Extracts raw OCR data (markdown and bounding boxes) from a file.
+    alignment_uniqueness_threshold: float = 0.5,
+    alignment_min_overlap: float = 0.9,
+) -> anchorite.AlignmentResult:
+    """Process a document, generating annotated markdown with OCR bounding boxes."""
+    if markdown_provider is None:
+        markdown_provider, anchor_provider = from_env()
 
-    Args:
-        document_input: The document to process (Path, str, bytes, or stream).
-        settings: Configuration settings.
-        markdown_content: Optional existing markdown content.
-        mime_type: Optional MIME type of the document.
-
-    Returns:
-        RawOcrData containing markdown and bounding boxes.
-    """
-    if settings is None:
-        settings = settings_module.Settings.from_env()
-
-    chunks = list(document.chunks(document_input, page_count=settings.markdown_page_batch_size, mime_type=mime_type))
-    if not markdown_content:
-        markdown_work = [_generate_markdown_for_chunk(settings, chunk) for chunk in chunks]
-        markdown_chunks = await _batched_gather(markdown_work, settings.num_jobs)
-
-        # Renumber tables and figures
-        counters: collections.Counter[str] = collections.Counter()
-
-        def _renumber(match: re.Match) -> str:
-            kind = match.group(1)
-            counters[kind] += 1
-            return f"<!--{kind}: {counters[kind]}-->"
-
-        markdown_chunks = [re.sub(r"<!--(table|figure)-->", _renumber, chunk_text) for chunk_text in markdown_chunks]
-        markdown_content = "\n".join(markdown_chunks)
-
-    bounding_box_work = [docai_ocr.generate_bounding_boxes(settings, chunk) for chunk in chunks]
-    bboxes = list(itertools.chain.from_iterable(await _batched_gather(bounding_box_work, settings.num_jobs)))
-
-    return RawOcrData(
-        markdown_content=markdown_content,
-        bounding_boxes=bboxes,
-    )
-
-
-async def process_document(
-    document_input: document.DocumentInput,
-    settings: settings_module.Settings | None = None,
-    markdown_content: str | None = None,
-    mime_type: str | None = None,
-) -> OcrResult:
-    """
-    Processes a document to generate annotated markdown with OCR bounding boxes.
-
-    Args:
-        document_input: The document to process (Path, str, bytes, or stream).
-        settings: Configuration settings.
-        markdown_content: Optional existing markdown content.
-        mime_type: Optional MIME type of the document (useful for bytes/stream input).
-
-    Returns:
-        OcrResult containing annotated markdown and stats.
-    """
-    if settings is None:
-        settings = settings_module.Settings.from_env()
-
-    raw_data = await extract_raw_data(document_input, settings, markdown_content, mime_type=mime_type)
-    annotated_markdown = bbox_alignment.create_annotated_markdown(
-        raw_data.markdown_content,
-        raw_data.bounding_boxes,
-        uniqueness_threshold=settings.alignment_uniqueness_threshold,
-        min_overlap=settings.alignment_min_overlap,
-    )
-
-    # Calculate coverage
-    if not raw_data.markdown_content:
-        coverage_percent = 0.0
-    else:
-        spans = list(annotated_markdown.values())
-        spans.sort()
-        merged: list[tuple[int, int]] = []
-        for start, end in spans:
-            if not merged or start > merged[-1][1]:
-                merged.append((start, end))
-            else:
-                merged[-1] = (merged[-1][0], max(merged[-1][1], end))
-
-        covered_len = sum(end - start for start, end in merged)
-        coverage_percent = covered_len / len(raw_data.markdown_content)
-
-    return OcrResult(
-        markdown_content=raw_data.markdown_content,
-        bounding_boxes=annotated_markdown,
-        coverage_percent=coverage_percent,
+    chunks = anchorite.document.chunks(document_input, page_count=page_count, mime_type=mime_type)
+    return await anchorite.process_document(
+        chunks,
+        markdown_provider,
+        anchor_provider,
+        alignment_uniqueness_threshold=alignment_uniqueness_threshold,
+        alignment_min_overlap=alignment_min_overlap,
+        renumber=True,
     )

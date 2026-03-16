@@ -3,68 +3,61 @@ from unittest.mock import patch
 
 import pytest
 
-from gemini_ocr.settings import Settings
+from gemini_ocr.docai_layout import DocAIMarkdownProvider
+from gemini_ocr.docai_ocr import DocAIAnchorProvider
+from gemini_ocr.gemini import GeminiMarkdownProvider
+from gemini_ocr.gemini_ocr import from_env
 
 
-def test_settings_from_env() -> None:
-    """Test loading from environment variable using from_env factory."""
+def test_from_env_gemini_mode() -> None:
     env = {
-        "GEMINI_OCR_PROJECT_ID": "env-project",
-        "GEMINI_OCR_LOCATION": "eu",
-        "GEMINI_OCR_LAYOUT_PROCESSOR_ID": "env-layout",
-        "GEMINI_OCR_OCR_PROCESSOR_ID": "env-ocr",
+        "GEMINI_OCR_PROJECT_ID": "my-project",
+        "GEMINI_OCR_LOCATION": "us-central1",
+        "GEMINI_OCR_GEMINI_MODEL_NAME": "gemini-2.0-flash",
+        "GEMINI_OCR_OCR_PROCESSOR_ID": "ocr-proc",
     }
     with patch.dict(os.environ, env, clear=True):
-        s = Settings.from_env()
-        assert s.project_id == "env-project"
-        assert s.get_documentai_location() == "eu"
+        markdown_provider, anchor_provider = from_env()
 
-        assert s.layout_processor_id == "env-layout"
-        assert s.ocr_processor_id == "env-ocr"
-        assert s.quota_project_id is None
+    assert isinstance(markdown_provider, GeminiMarkdownProvider)
+    assert markdown_provider.project_id == "my-project"
+    assert markdown_provider.model_name == "gemini-2.0-flash"
+    assert isinstance(anchor_provider, DocAIAnchorProvider)
+    assert anchor_provider.processor_id == "ocr-proc"
 
-    # Test setting QUOTA_PROJECT_ID
-    env["GEMINI_OCR_QUOTA_PROJECT_ID"] = "env-quota"
-    with patch.dict(os.environ, env, clear=True):
-        s = Settings.from_env()
-        assert s.quota_project_id == "env-quota"
 
-    # Test overridden locations
-    env_loc = {
-        "GEMINI_OCR_PROJECT_ID": "p",
+def test_from_env_documentai_mode() -> None:
+    env = {
+        "GEMINI_OCR_PROJECT_ID": "my-project",
         "GEMINI_OCR_LOCATION": "europe-west1",
+        "GEMINI_OCR_MODE": "documentai",
+        "GEMINI_OCR_LAYOUT_PROCESSOR_ID": "layout-proc",
         "GEMINI_OCR_DOCUMENTAI_LOCATION": "eu",
     }
-    with patch.dict(os.environ, env_loc, clear=True):
-        s = Settings.from_env()
-        assert s.get_documentai_location() == "eu"
-        assert s.location == "europe-west1"
+    with patch.dict(os.environ, env, clear=True):
+        markdown_provider, anchor_provider = from_env()
+
+    assert isinstance(markdown_provider, DocAIMarkdownProvider)
+    assert markdown_provider.processor_id == "layout-proc"
+    assert markdown_provider.documentai_location == "eu"
+    assert anchor_provider is None  # no ocr_processor_id set
 
 
-def test_settings_from_env_defaults() -> None:
-    """Test default values when using from_env."""
-    with patch.dict(
-        os.environ,
-        {
-            "GEMINI_OCR_PROJECT_ID": "test-project",
-            # LOCATION allows defaults/fallback
-        },
-        clear=True,
-    ):
-        # layout_processor_id and ocr_processor_id return None if missing in env
-        s = Settings.from_env()
-        assert s.project_id == "test-project"
-        assert s.get_documentai_location() == "us"  # default
-        assert s.location == "us-central1"
+def test_from_env_no_bboxes() -> None:
+    env = {
+        "GEMINI_OCR_PROJECT_ID": "p",
+        "GEMINI_OCR_GEMINI_MODEL_NAME": "gemini-2.0-flash",
+        "GEMINI_OCR_INCLUDE_BBOXES": "false",
+    }
+    with patch.dict(os.environ, env, clear=True):
+        _, anchor_provider = from_env()
 
-        assert s.layout_processor_id is None
-        assert s.ocr_processor_id is None
+    assert anchor_provider is None
 
 
-def test_settings_validation_error() -> None:
-    """Test validation raises error if missing required env vars in from_env."""
+def test_from_env_missing_project_id() -> None:
     with (
         patch.dict(os.environ, {}, clear=True),
         pytest.raises(ValueError, match="PROJECT_ID environment variable is required"),
     ):
-        Settings.from_env()
+        from_env()
